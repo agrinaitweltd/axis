@@ -39,6 +39,13 @@
   /* --- Mobile nav toggle --- */
   var hamburger = document.getElementById('hamburger');
   var mobileNav = document.getElementById('mobileNav');
+  var mobileNavClose = document.getElementById('mobileNavClose');
+
+  function closeMobileNav() {
+    if (mobileNav) mobileNav.classList.remove('open');
+    if (hamburger) hamburger.classList.remove('open');
+    document.body.style.overflow = '';
+  }
 
   if (hamburger && mobileNav) {
     hamburger.addEventListener('click', function () {
@@ -48,11 +55,23 @@
     });
   }
 
+  if (mobileNavClose) {
+    mobileNavClose.addEventListener('click', closeMobileNav);
+  }
+
+  /* Close when clicking backdrop (outside nav links) */
+  if (mobileNav) {
+    mobileNav.addEventListener('click', function (e) {
+      if (e.target === mobileNav) closeMobileNav();
+    });
+  }
+
   /* --- Mobile sub-menu toggles --- */
   document.querySelectorAll('.mobile-sub-trigger').forEach(function (btn) {
     btn.addEventListener('click', function () {
       var sub = document.getElementById(btn.dataset.target);
       if (sub) sub.classList.toggle('open');
+      btn.classList.toggle('open');
     });
   });
 
@@ -160,11 +179,7 @@
   /* --- Close mobile nav on link click --- */
   if (mobileNav) {
     mobileNav.querySelectorAll('a').forEach(function (link) {
-      link.addEventListener('click', function () {
-        mobileNav.classList.remove('open');
-        if (hamburger) hamburger.classList.remove('open');
-        document.body.style.overflow = '';
-      });
+      link.addEventListener('click', closeMobileNav);
     });
   }
 

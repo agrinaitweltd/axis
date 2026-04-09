@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/png" href="/public/logo.png" sizes="512x512" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/public/logo.png" />
+  <link rel="icon" type="image/png" href="/public/logo1.png" sizes="512x512" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/logo1.png" />
   <link rel="stylesheet" href="/src/css/style.css" />
 </head>
 <body>
@@ -54,20 +54,34 @@
     </div>
   </nav>
 
+  <!-- Mobile Nav -->
   <div class="mobile-nav" id="mobileNav">
-    <a href="/">Home</a>
-    <a href="/about">About Us</a>
-    <button class="mobile-sub-trigger" data-target="mobileProducts">Products</button>
-    <div class="mobile-sub" id="mobileProducts">
-      <a href="/products/coffee">Coffee</a>
-      <a href="/products/fruits">Fresh Fruits</a>
-      <a href="/products/grains">Grains</a>
-      <a href="/products/other-produce">Other Produce</a>
+    <div class="mobile-nav-header">
+      <img src="/public/logo.png" alt="Axis International" class="mobile-nav-logo" />
+      <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
     </div>
-    <a href="/export-import">Export &amp; Import</a>
-    <a href="/sourcing">Our Sourcing</a>
-    <a href="/contact">Contact Us</a>
-    <a href="/contact" style="color:var(--green-400);font-weight:700;">Get a Quote</a>
+    <div class="mobile-nav-links">
+      <a href="/">Home</a>
+      <a href="/about">About Us</a>
+      <button class="mobile-sub-trigger" data-target="mobileProducts">
+        Products
+        <svg class="mobile-sub-chevron" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <div class="mobile-sub" id="mobileProducts">
+        <a href="/products/coffee">Coffee</a>
+        <a href="/products/fruits">Fresh Fruits</a>
+        <a href="/products/grains">Grains</a>
+        <a href="/products/other-produce">Other Produce</a>
+      </div>
+      <a href="/export-import">Export &amp; Import</a>
+      <a href="/sourcing">Our Sourcing</a>
+      <a href="/contact">Contact Us</a>
+    </div>
+    <div class="mobile-nav-footer">
+      <a href="/contact" class="btn btn-primary">Get a Quote</a>
+    </div>
   </div>
 
   <div class="page-banner">
