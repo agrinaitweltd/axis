@@ -1224,7 +1224,7 @@ footer {
 }
 
 .footer-brand .footer-logo {
-  height: 70px;
+  height: 96px;
   width: auto;
   margin-bottom: 1.25rem;
   filter: brightness(0) invert(1);
@@ -1831,6 +1831,11 @@ footer {
 .partner-logo.partner-lg {
   height: 90px;
   width: 220px;
+  transform: translateY(-14px);
+}
+
+.partner-logo.partner-lg:hover {
+  transform: translateY(-14px) scale(1.05);
 }
 
 /* ============================================================
