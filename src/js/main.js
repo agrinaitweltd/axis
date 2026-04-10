@@ -224,14 +224,22 @@
   if (contactForm) {
     var submitBtn = document.getElementById('submitBtn');
     
+    // Enable submit button by default
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+    }
+    
     contactForm.addEventListener('submit', function (e) {
       e.preventDefault();
       
-      // Check if reCAPTCHA is verified (in real app, this would be verified server-side)
-      var recaptchaResponse = grecaptcha.getResponse();
-      if (!recaptchaResponse) {
-        alert('Please complete the reCAPTCHA verification.');
-        return;
+      // Check if reCAPTCHA is verified (only if reCAPTCHA is loaded)
+      if (typeof grecaptcha !== 'undefined') {
+        var recaptchaResponse = grecaptcha.getResponse();
+        if (!recaptchaResponse) {
+          alert('Please complete the reCAPTCHA verification.');
+          return;
+        }
       }
 
       // Show success state
@@ -246,7 +254,9 @@
           submitBtn.style.background = '';
           submitBtn.disabled = false;
           contactForm.reset();
-          grecaptcha.reset();
+          if (typeof grecaptcha !== 'undefined') {
+            grecaptcha.reset();
+          }
         }, 3000);
       }
     });
