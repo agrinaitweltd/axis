@@ -183,31 +183,66 @@
     });
   }
 
-  /* --- Conditional form fields based on business type --- */
-  var businessTypeSelect = document.getElementById('businessType');
-  if (businessTypeSelect) {
-    var wholesaleFields = document.getElementById('wholesaleFields');
-    var exportFields = document.getElementById('exportFields');
-    var producerFields = document.getElementById('producerFields');
+  /* --- Business type card selector & conditional fields --- */
+  var bizTypeGrid = document.getElementById('bizTypeGrid');
+  if (bizTypeGrid) {
+    var allConditionalSections = [
+      'fields-farmer', 'fields-cooperative', 'fields-wholesale',
+      'fields-importer', 'fields-exporter', 'fields-retailer',
+      'fields-manufacturer', 'fields-trader', 'fields-logistics'
+    ];
+    var commonFields = document.getElementById('commonFields');
 
-    function updateConditionalFields() {
-      var selectedType = businessTypeSelect.value;
-      
-      if (wholesaleFields) wholesaleFields.style.display = 'none';
-      if (exportFields) exportFields.style.display = 'none';
-      if (producerFields) producerFields.style.display = 'none';
+    function showConditionalSection(value) {
+      // Hide all conditional sections
+      allConditionalSections.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+      });
 
-      if (selectedType === 'wholesale' || selectedType === 'retail' || selectedType === 'import') {
-        if (wholesaleFields) wholesaleFields.style.display = 'block';
-      } else if (selectedType === 'export') {
-        if (exportFields) exportFields.style.display = 'block';
-      } else if (selectedType === 'producer') {
-        if (producerFields) producerFields.style.display = 'block';
+      // Show matching section
+      var sectionMap = {
+        farmer: 'fields-farmer',
+        cooperative: 'fields-cooperative',
+        wholesale: 'fields-wholesale',
+        importer: 'fields-importer',
+        exporter: 'fields-exporter',
+        retailer: 'fields-retailer',
+        manufacturer: 'fields-manufacturer',
+        trader: 'fields-trader',
+        logistics: 'fields-logistics'
+      };
+
+      if (sectionMap[value]) {
+        var target = document.getElementById(sectionMap[value]);
+        if (target) {
+          target.style.display = 'block';
+          target.classList.remove('cond-animate');
+          // Force reflow then re-add class to re-trigger animation
+          void target.offsetWidth;
+          target.classList.add('cond-animate');
+        }
+      }
+
+      // Show common fields for any selection
+      if (commonFields) {
+        commonFields.style.display = value ? 'block' : 'none';
       }
     }
 
-    businessTypeSelect.addEventListener('change', updateConditionalFields);
-    updateConditionalFields();
+    // Handle card radio click — add .selected to parent label
+    var bizCards = bizTypeGrid.querySelectorAll('.biz-card input[type="radio"]');
+    bizCards.forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        // Remove selected from all cards
+        bizTypeGrid.querySelectorAll('.biz-card').forEach(function(card) {
+          card.classList.remove('selected');
+        });
+        // Mark chosen card
+        this.closest('.biz-card').classList.add('selected');
+        showConditionalSection(this.value);
+      });
+    });
   }
 
   /* --- reCAPTCHA success callback --- */

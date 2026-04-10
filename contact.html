@@ -106,6 +106,8 @@
             <p style="margin-bottom:2rem;font-size:0.95rem;">Fill in the form below and a member of our team will respond within one business day.</p>
 
             <form id="contactForm" novalidate>
+
+              <!-- ── Contact Details ── -->
               <div class="form-row">
                 <div class="form-group">
                   <label for="firstName">First Name *</label>
@@ -116,182 +118,598 @@
                   <input type="text" id="lastName" name="lastName" placeholder="Smith" required />
                 </div>
               </div>
-
-              <div class="form-group">
-                <label for="email">Email Address *</label>
-                <input type="email" id="email" name="email" placeholder="john@yourcompany.com" required />
-              </div>
-
-              <div class="form-group">
-                <label for="company">Company Name</label>
-                <input type="text" id="company" name="company" placeholder="Your Company Ltd" />
-              </div>
-
-              <div class="form-group">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" placeholder="+44 7000 000000" />
-              </div>
-
               <div class="form-row">
                 <div class="form-group">
-                  <label for="businessType">Type of Business *</label>
-                  <select id="businessType" name="businessType" required>
-                    <option value="" disabled selected>Select business type...</option>
-                    <option value="wholesale">Wholesale / Distributor</option>
-                    <option value="export">Export (Non-UK)</option>
-                    <option value="import">Import (Direct Buyer)</option>
-                    <option value="producer">Producer / Farmer</option>
-                    <option value="retail">Retail / Food Service</option>
-                    <option value="other">Other</option>
-                  </select>
+                  <label for="email">Email Address *</label>
+                  <input type="email" id="email" name="email" placeholder="john@yourcompany.com" required />
                 </div>
                 <div class="form-group">
-                  <label for="destination">Destination Region *</label>
-                  <select id="destination" name="destination" required>
-                    <option value="" disabled selected>Where do you operate?</option>
+                  <label for="phone">Phone / WhatsApp *</label>
+                  <input type="tel" id="phone" name="phone" placeholder="+44 7000 000000" required />
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="company">Company / Farm / Organisation Name</label>
+                  <input type="text" id="company" name="company" placeholder="Your Company Ltd" />
+                </div>
+                <div class="form-group">
+                  <label for="country">Country *</label>
+                  <select id="country" name="country" required>
+                    <option value="" disabled selected>Where are you based?</option>
                     <option value="uk">United Kingdom</option>
+                    <option value="uganda">Uganda</option>
+                    <option value="kenya">Kenya</option>
+                    <option value="tanzania">Tanzania</option>
+                    <option value="ethiopia">Ethiopia</option>
+                    <option value="rwanda">Rwanda</option>
+                    <option value="other-africa">Other African Country</option>
                     <option value="europe">Europe</option>
-                    <option value="africa">Africa</option>
                     <option value="asia">Asia</option>
                     <option value="americas">Americas</option>
                     <option value="middle-east">Middle East</option>
-                    <option value="global">Multiple / Global</option>
                     <option value="other">Other</option>
                   </select>
                 </div>
               </div>
 
-              <div class="form-group">
-                <label for="interest">Product of Interest *</label>
-                <select id="interest" name="interest" required>
-                  <option value="" disabled selected>Select a product...</option>
-                  <optgroup label="Coffee">
-                    <option value="coffee-arabica">Arabica Coffee</option>
-                    <option value="coffee-robusta">Robusta Coffee</option>
-                    <option value="coffee-specialty">Specialty / Premium Coffee</option>
-                    <option value="coffee-bulk">Coffee (Bulk/General)</option>
-                  </optgroup>
-                  <optgroup label="Fresh Fruits">
-                    <option value="fruits-avocado">Avocados</option>
-                    <option value="fruits-mango">Mangoes</option>
-                    <option value="fruits-pineapple">Pineapples</option>
-                    <option value="fruits-banana">Bananas</option>
-                    <option value="fruits-citrus">Citrus</option>
-                    <option value="fruits-mixed">Mixed Fruits</option>
-                  </optgroup>
-                  <optgroup label="Grains & Seeds">
-                    <option value="grains-maize">Maize / Corn</option>
-                    <option value="grains-sorghum">Sorghum</option>
-                    <option value="grains-millet">Millet</option>
-                    <option value="grains-wheat">Wheat</option>
-                    <option value="grains-mixed">Mixed Grains</option>
-                  </optgroup>
-                  <optgroup label="Other Produce">
-                    <option value="produce-nuts">Nuts & Legumes</option>
-                    <option value="produce-spices">Spices & Herbs</option>
-                    <option value="produce-dried">Dried Produce</option>
-                    <option value="produce-other">Other Produce</option>
-                  </optgroup>
-                  <optgroup label="Services">
-                    <option value="export-services">Export Services</option>
-                    <option value="import-services">Import / UK Wholesale Services</option>
-                    <option value="logistics">Logistics & Supply Chain</option>
-                    <option value="enquiry">General Enquiry</option>
-                  </optgroup>
-                </select>
+              <!-- ── Business Type (prominent card selector) ── -->
+              <div class="form-group biz-type-group">
+                <label class="biz-type-label">What best describes you? *</label>
+                <p class="biz-type-hint">We'll tailor the form to your specific situation.</p>
+                <div class="biz-type-grid" id="bizTypeGrid">
+
+                  <label class="biz-card" for="bt-farmer">
+                    <input type="radio" id="bt-farmer" name="businessType" value="farmer" />
+                    <span class="biz-card-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2a7 7 0 0 1 7 7c0 4-3.5 8-7 11C8.5 17 5 13 5 9a7 7 0 0 1 7-7z"/><circle cx="12" cy="9" r="2.5" stroke-linecap="round"/></svg>
+                    </span>
+                    <span class="biz-card-title">Farmer / Producer</span>
+                    <span class="biz-card-sub">I grow produce &amp; want to supply Axis</span>
+                  </label>
+
+                  <label class="biz-card" for="bt-cooperative">
+                    <input type="radio" id="bt-cooperative" name="businessType" value="cooperative" />
+                    <span class="biz-card-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="9" r="2.5"/><path stroke-linecap="round" d="M2 20c0-3.3 3.1-6 7-6s7 2.7 7 6"/><path stroke-linecap="round" d="M19 20c0-2.2-1.4-4-3.5-5"/></svg>
+                    </span>
+                    <span class="biz-card-title">Farming Cooperative</span>
+                    <span class="biz-card-sub">Group of farmers seeking an export partner</span>
+                  </label>
+
+                  <label class="biz-card" for="bt-wholesale">
+                    <input type="radio" id="bt-wholesale" name="businessType" value="wholesale" />
+                    <span class="biz-card-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="14" rx="2"/><path stroke-linecap="round" d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+                    </span>
+                    <span class="biz-card-title">Wholesale / Distributor</span>
+                    <span class="biz-card-sub">Bulk buyer distributing to other businesses</span>
+                  </label>
+
+                  <label class="biz-card" for="bt-importer">
+                    <input type="radio" id="bt-importer" name="businessType" value="importer" />
+                    <span class="biz-card-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M12 19V5m-7 7 7-7 7 7"/><rect x="3" y="19" width="18" height="2" rx="1"/></svg>
+                    </span>
+                    <span class="biz-card-title">UK Importer / Buyer</span>
+                    <span class="biz-card-sub">Buying produce directly for UK operations</span>
+                  </label>
+
+                  <label class="biz-card" for="bt-exporter">
+                    <input type="radio" id="bt-exporter" name="businessType" value="exporter" />
+                    <span class="biz-card-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M12 5v14m7-7-7 7-7-7"/><rect x="3" y="3" width="18" height="2" rx="1"/></svg>
+                    </span>
+                    <span class="biz-card-title">International Exporter</span>
+                    <span class="biz-card-sub">Moving produce to international markets</span>
+                  </label>
+
+                  <label class="biz-card" for="bt-retailer">
+                    <input type="radio" id="bt-retailer" name="businessType" value="retailer" />
+                    <span class="biz-card-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path stroke-linecap="round" d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    </span>
+                    <span class="biz-card-title">Retailer / Food Service</span>
+                    <span class="biz-card-sub">Supermarket, restaurant, hotel, catering</span>
+                  </label>
+
+                  <label class="biz-card" for="bt-manufacturer">
+                    <input type="radio" id="bt-manufacturer" name="businessType" value="manufacturer" />
+                    <span class="biz-card-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M2 20V10l6-4v4l6-4v4l6-4v14H2z"/></svg>
+                    </span>
+                    <span class="biz-card-title">Food Manufacturer</span>
+                    <span class="biz-card-sub">Processing raw agricultural products</span>
+                  </label>
+
+                  <label class="biz-card" for="bt-trader">
+                    <input type="radio" id="bt-trader" name="businessType" value="trader" />
+                    <span class="biz-card-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" d="M3 3h18v4H3zM3 10h18v4H3zM3 17h18v4H3z"/></svg>
+                    </span>
+                    <span class="biz-card-title">Commodity Trader / Broker</span>
+                    <span class="biz-card-sub">Trading agricultural commodities on markets</span>
+                  </label>
+
+                  <label class="biz-card" for="bt-logistics">
+                    <input type="radio" id="bt-logistics" name="businessType" value="logistics" />
+                    <span class="biz-card-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13" rx="1"/><path stroke-linecap="round" d="M16 8h4l3 5v4h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                    </span>
+                    <span class="biz-card-title">Freight / Logistics</span>
+                    <span class="biz-card-sub">Looking to partner on shipping &amp; logistics</span>
+                  </label>
+
+                  <label class="biz-card" for="bt-other">
+                    <input type="radio" id="bt-other" name="businessType" value="other" />
+                    <span class="biz-card-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" d="M12 8v4l3 3"/></svg>
+                    </span>
+                    <span class="biz-card-title">Other / General</span>
+                    <span class="biz-card-sub">Something else — just get in touch</span>
+                  </label>
+
+                </div>
               </div>
 
-              <div class="form-group">
-                <label for="quantity">Estimated Quantity Required</label>
-                <input type="text" id="quantity" name="quantity" placeholder="e.g. 5 tonnes, 1 container (40ft), 100kg, etc." />
-              </div>
+              <!-- ── Conditional detail sections ── -->
 
-              <!-- Conditional fields based on business type -->
-              <div id="wholesaleFields" class="conditional-fields" style="display:none;">
+              <!-- FARMER -->
+              <div id="fields-farmer" class="conditional-fields" style="display:none;">
+                <div class="conditional-header">
+                  <span>Tell us about your farm</span>
+                </div>
                 <div class="form-group">
-                  <label for="storageRequirements">Do you have cold storage facilities? *</label>
-                  <select id="storageRequirements" name="storageRequirements">
+                  <label for="f-crops">What do you grow? *</label>
+                  <select id="f-crops" name="farmerCrops" required>
+                    <option value="">Select primary crop...</option>
+                    <option value="coffee">Coffee (Arabica / Robusta)</option>
+                    <option value="avocado">Avocados</option>
+                    <option value="mango">Mangoes</option>
+                    <option value="pineapple">Pineapples</option>
+                    <option value="banana">Bananas / Plantain</option>
+                    <option value="maize">Maize / Corn</option>
+                    <option value="sorghum">Sorghum</option>
+                    <option value="millet">Millet</option>
+                    <option value="beans">Beans / Legumes</option>
+                    <option value="spices">Spices &amp; Herbs</option>
+                    <option value="multiple">Multiple Crops</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="f-size">Farm Size *</label>
+                    <select id="f-size" name="farmSize">
+                      <option value="">Select size...</option>
+                      <option value="<2">Less than 2 hectares</option>
+                      <option value="2-10">2–10 hectares</option>
+                      <option value="10-50">10–50 hectares</option>
+                      <option value="50-200">50–200 hectares</option>
+                      <option value=">200">Over 200 hectares</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="f-years">Years Farming This Crop *</label>
+                    <input type="number" id="f-years" name="farmYears" placeholder="e.g. 8" min="0" />
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="f-volume">Estimated Annual Harvest Volume</label>
+                    <input type="text" id="f-volume" name="farmVolume" placeholder="e.g. 10 tonnes, 500 bags" />
+                  </div>
+                  <div class="form-group">
+                    <label for="f-location">Region / District</label>
+                    <input type="text" id="f-location" name="farmLocation" placeholder="e.g. Western Uganda, Mount Elgon" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="f-certifications">Do you hold any certifications?</label>
+                  <input type="text" id="f-certifications" name="farmCerts" placeholder="e.g. Organic, Fairtrade, Rainforest Alliance, GlobalGAP — or None" />
+                </div>
+                <div class="form-group">
+                  <label for="f-processing">Do you have on-farm processing facilities?</label>
+                  <select id="f-processing" name="farmProcessing">
                     <option value="">Select...</option>
-                    <option value="yes">Yes, Full Cold Chain</option>
-                    <option value="partial">Partial Cold Storage</option>
-                    <option value="ambient">Ambient Storage Only</option>
-                    <option value="no">No Storage Facilities</option>
+                    <option value="full">Yes — full processing (washing, drying, milling)</option>
+                    <option value="partial">Partial — basic sorting / drying only</option>
+                    <option value="none">No — raw harvest only</option>
                   </select>
                 </div>
                 <div class="form-group">
-                  <label for="certifications">Required Certifications (if any)</label>
-                  <input type="text" id="certifications" name="certifications" placeholder="e.g. Organic, Fairtrade, GlobalGAP, etc." />
-                </div>
-              </div>
-
-              <div id="exportFields" class="conditional-fields" style="display:none;">
-                <div class="form-group">
-                  <label for="ageOfBusiness">How long has your business been operating? *</label>
-                  <select id="ageOfBusiness" name="ageOfBusiness">
+                  <label for="f-goal">What are you looking for? *</label>
+                  <select id="f-goal" name="farmGoal" required>
                     <option value="">Select...</option>
-                    <option value="<1">Less than 1 year</option>
-                    <option value="1-3">1-3 years</option>
-                    <option value="3-5">3-5 years</option>
-                    <option value=">5">More than 5 years</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="shippingPreference">Preferred Shipping Method *</label>
-                  <select id="shippingPreference" name="shippingPreference">
-                    <option value="">Select...</option>
-                    <option value="fcl">Full Container Load (FCL)</option>
-                    <option value="lcl">Less Than Container Load (LCL)</option>
-                    <option value="air">Air Freight</option>
-                    <option value="flexible">Flexible / Negotiate</option>
+                    <option value="long-contract">Long-term supply contract with Axis</option>
+                    <option value="single-export">One-off export assistance</option>
+                    <option value="advance-payment">Advance payment / crop financing</option>
+                    <option value="buyer-intro">Introduction to international buyers</option>
+                    <option value="training">Training &amp; certification support</option>
+                    <option value="general">General partnership discussion</option>
                   </select>
                 </div>
               </div>
 
-              <div id="producerFields" class="conditional-fields" style="display:none;">
+              <!-- COOPERATIVE -->
+              <div id="fields-cooperative" class="conditional-fields" style="display:none;">
+                <div class="conditional-header"><span>Tell us about your cooperative</span></div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="c-members">Number of Farmers in Cooperative *</label>
+                    <select id="c-members" name="coopMembers">
+                      <option value="">Select...</option>
+                      <option value="<20">Less than 20</option>
+                      <option value="20-100">20–100 farmers</option>
+                      <option value="100-500">100–500 farmers</option>
+                      <option value=">500">Over 500 farmers</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="c-land">Total Land Under Cultivation</label>
+                    <input type="text" id="c-land" name="coopLand" placeholder="e.g. 500 hectares" />
+                  </div>
+                </div>
                 <div class="form-group">
-                  <label for="farmSize">Size of Your Farm / Operation *</label>
-                  <select id="farmSize" name="farmSize">
-                    <option value="">Select...</option>
-                    <option value="<5">Less than 5 hectares</option>
-                    <option value="5-20">5-20 hectares</option>
-                    <option value="20-50">20-50 hectares</option>
-                    <option value=">50">More than 50 hectares</option>
+                  <label for="c-products">Primary Products *</label>
+                  <input type="text" id="c-products" name="coopProducts" placeholder="e.g. Coffee, Maize, Avocados" required />
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="c-volume">Annual Export-Ready Volume</label>
+                    <input type="text" id="c-volume" name="coopVolume" placeholder="e.g. 200 tonnes" />
+                  </div>
+                  <div class="form-group">
+                    <label for="c-certs">Certifications Held</label>
+                    <input type="text" id="c-certs" name="coopCerts" placeholder="e.g. Fairtrade, Organic, UTZ" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="c-need">What does the cooperative need? *</label>
+                  <select id="c-need" name="coopNeed" required>
+                    <option value="">Select primary need...</option>
+                    <option value="export-partner">Reliable export partner / offtaker</option>
+                    <option value="premium-market">Access to premium / specialty markets</option>
+                    <option value="financing">Crop financing / advance payment</option>
+                    <option value="certification">Help achieving export certification</option>
+                    <option value="logistics">Logistics &amp; freight support</option>
+                    <option value="all">Comprehensive partnership</option>
                   </select>
                 </div>
+              </div>
+
+              <!-- WHOLESALE/DISTRIBUTOR -->
+              <div id="fields-wholesale" class="conditional-fields" style="display:none;">
+                <div class="conditional-header"><span>Your wholesale requirements</span></div>
                 <div class="form-group">
-                  <label for="yearsOfExperience">Years of experience with this product *</label>
-                  <input type="number" id="yearsOfExperience" name="yearsOfExperience" placeholder="e.g. 5" min="0" />
+                  <label for="w-products">Products of Interest *</label>
+                  <input type="text" id="w-products" name="wholesaleProducts" placeholder="e.g. Arabica Coffee, Avocados, Maize" required />
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="w-volume">Estimated Monthly Volume *</label>
+                    <input type="text" id="w-volume" name="wholesaleVolume" placeholder="e.g. 5 tonnes / month" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="w-frequency">Order Frequency</label>
+                    <select id="w-frequency" name="wholesaleFrequency">
+                      <option value="">Select...</option>
+                      <option value="weekly">Weekly</option>
+                      <option value="fortnightly">Fortnightly</option>
+                      <option value="monthly">Monthly</option>
+                      <option value="quarterly">Quarterly</option>
+                      <option value="one-off">One-off / Ad hoc</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="w-storage">Storage Facilities</label>
+                    <select id="w-storage" name="wholesaleStorage">
+                      <option value="">Select...</option>
+                      <option value="full-cold">Full cold chain / refrigerated</option>
+                      <option value="partial-cold">Partial cold storage</option>
+                      <option value="ambient">Ambient warehouse only</option>
+                      <option value="none">No storage — direct distribution</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="w-delivery">Delivery Preference</label>
+                    <select id="w-delivery" name="wholesaleDelivery">
+                      <option value="">Select...</option>
+                      <option value="fcl">Full Container Load (FCL)</option>
+                      <option value="lcl">Less Than Container Load (LCL)</option>
+                      <option value="palletised">Palletised delivery (UK)</option>
+                      <option value="mixed">Mixed / Flexible</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="w-certs">Quality / Certifications Required</label>
+                  <input type="text" id="w-certs" name="wholesaleCerts" placeholder="e.g. BRC, SALSA, Organic, Fairtrade" />
                 </div>
               </div>
 
-              <div class="form-group">
-                <label for="timeline">Required Timeline *</label>
-                <select id="timeline" name="timeline" required>
-                  <option value="">Select delivery timeline...</option>
-                  <option value="urgent">Urgent (within 2 weeks)</option>
-                  <option value="short">Short Term (1-2 months)</option>
-                  <option value="medium">Medium Term (2-6 months)</option>
-                  <option value="longterm">Long Term / Recurring</option>
-                  <option value="flexible">Flexible Timeline</option>
-                </select>
+              <!-- UK IMPORTER -->
+              <div id="fields-importer" class="conditional-fields" style="display:none;">
+                <div class="conditional-header"><span>Your import requirements</span></div>
+                <div class="form-group">
+                  <label for="i-products">Products Required *</label>
+                  <input type="text" id="i-products" name="importProducts" placeholder="e.g. Robusta Coffee, Pineapples, Sorghum" required />
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="i-volume">Order Volume *</label>
+                    <input type="text" id="i-volume" name="importVolume" placeholder="e.g. 1 x 40ft container / month" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="i-port">UK Port of Entry</label>
+                    <select id="i-port" name="importPort">
+                      <option value="">Select preferred port...</option>
+                      <option value="felixstowe">Felixstowe</option>
+                      <option value="southampton">Southampton</option>
+                      <option value="tilbury">Tilbury / London Gateway</option>
+                      <option value="liverpool">Liverpool</option>
+                      <option value="bristol">Bristol / Avonmouth</option>
+                      <option value="any">Any / Flexible</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="i-incoterms">Preferred Incoterms</label>
+                    <select id="i-incoterms" name="importIncoterms">
+                      <option value="">Select...</option>
+                      <option value="cif">CIF — Cost, Insurance &amp; Freight</option>
+                      <option value="fob">FOB — Free On Board</option>
+                      <option value="dap">DAP — Delivered at Place</option>
+                      <option value="ddp">DDP — Delivered Duty Paid</option>
+                      <option value="flexible">Flexible / Open to discussion</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="i-customs">Do you handle your own customs clearance?</label>
+                    <select id="i-customs" name="importCustoms">
+                      <option value="">Select...</option>
+                      <option value="yes">Yes, we manage clearance in-house</option>
+                      <option value="broker">We use a customs broker</option>
+                      <option value="no">No — we need Axis to handle it</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="i-specs">Quality / Specification Requirements</label>
+                  <textarea id="i-specs" name="importSpecs" rows="2" placeholder="e.g. Grade A, moisture ≤12%, screen size 18+, certifications needed..."></textarea>
+                </div>
               </div>
 
-              <div class="form-group">
-                <label for="budget">Estimated Budget Range</label>
-                <select id="budget" name="budget">
-                  <option value="">Select budget range...</option>
-                  <option value="<5k">Less than £5,000</option>
-                  <option value="5k-20k">£5,000 - £20,000</option>
-                  <option value="20k-50k">£20,000 - £50,000</option>
-                  <option value="50k-100k">£50,000 - £100,000</option>
-                  <option value=">100k">Above £100,000</option>
-                  <option value="tbd">To Be Determined</option>
-                </select>
+              <!-- INTERNATIONAL EXPORTER -->
+              <div id="fields-exporter" class="conditional-fields" style="display:none;">
+                <div class="conditional-header"><span>Your export requirements</span></div>
+                <div class="form-group">
+                  <label for="ex-products">Products You Need to Source *</label>
+                  <input type="text" id="ex-products" name="exportProducts" placeholder="e.g. Arabica Coffee, Avocados" required />
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="ex-dest">Destination Markets *</label>
+                    <input type="text" id="ex-dest" name="exportDestination" placeholder="e.g. Germany, UAE, Japan" required />
+                  </div>
+                  <div class="form-group">
+                    <label for="ex-volume">Required Volume</label>
+                    <input type="text" id="ex-volume" name="exportVolume" placeholder="e.g. 2 containers / quarter" />
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="ex-shipping">Shipping Preference</label>
+                    <select id="ex-shipping" name="exportShipping">
+                      <option value="">Select...</option>
+                      <option value="fcl">FCL — Full Container Load</option>
+                      <option value="lcl">LCL — Less Than Container Load</option>
+                      <option value="air">Air Freight</option>
+                      <option value="flexible">Flexible</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="ex-terms">Preferred Trade Terms</label>
+                    <select id="ex-terms" name="exportTerms">
+                      <option value="">Select Incoterms...</option>
+                      <option value="fob">FOB</option>
+                      <option value="cif">CIF</option>
+                      <option value="cfr">CFR</option>
+                      <option value="exw">EXW</option>
+                      <option value="flexible">Open to discussion</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="ex-certs">Certifications / Standards Required</label>
+                  <input type="text" id="ex-certs" name="exportCerts" placeholder="e.g. Organic, Fairtrade, phytosanitary, country-specific standards" />
+                </div>
               </div>
 
-              <div class="form-group">
-                <label for="message">Additional Details & Specific Requirements *</label>
-                <textarea id="message" name="message" rows="4" placeholder="Please describe your specific requirements, quality standards, volume, delivery preferences, and any other relevant details..." required></textarea>
+              <!-- RETAILER -->
+              <div id="fields-retailer" class="conditional-fields" style="display:none;">
+                <div class="conditional-header"><span>Your retail / food service needs</span></div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="r-type">Type of Business *</label>
+                    <select id="r-type" name="retailType" required>
+                      <option value="">Select...</option>
+                      <option value="supermarket">Supermarket / Grocery chain</option>
+                      <option value="independent">Independent grocery / food shop</option>
+                      <option value="restaurant">Restaurant / Café / Bar</option>
+                      <option value="hotel">Hotel / Hospitality</option>
+                      <option value="catering">Catering company</option>
+                      <option value="online">Online food retailer</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="r-locations">Number of Locations / Sites</label>
+                    <select id="r-locations" name="retailLocations">
+                      <option value="">Select...</option>
+                      <option value="1">1 location</option>
+                      <option value="2-5">2–5 locations</option>
+                      <option value="6-20">6–20 locations</option>
+                      <option value=">20">More than 20</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="r-products">Products of Interest *</label>
+                  <input type="text" id="r-products" name="retailProducts" placeholder="e.g. Specialty Coffee, Fresh Avocados, Dried Fruits" required />
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="r-pack">Required Packaging</label>
+                    <select id="r-pack" name="retailPack">
+                      <option value="">Select...</option>
+                      <option value="bulk">Bulk (sacks / pallet)</option>
+                      <option value="wholesale-box">Wholesale boxes / crates</option>
+                      <option value="retail-ready">Retail-ready / branded packs</option>
+                      <option value="open">Open to options</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="r-origin">Origin Labelling Important?</label>
+                    <select id="r-origin" name="retailOrigin">
+                      <option value="">Select...</option>
+                      <option value="yes-key">Yes — a key selling point for us</option>
+                      <option value="yes-standard">Yes — standard country of origin</option>
+                      <option value="no">Not a priority</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- FOOD MANUFACTURER -->
+              <div id="fields-manufacturer" class="conditional-fields" style="display:none;">
+                <div class="conditional-header"><span>Your raw material requirements</span></div>
+                <div class="form-group">
+                  <label for="m-makes">What do you manufacture? *</label>
+                  <input type="text" id="m-makes" name="mfrProduct" placeholder="e.g. Roasted coffee, fruit juice, flour products" required />
+                </div>
+                <div class="form-group">
+                  <label for="m-inputs">Raw Materials / Ingredients Needed *</label>
+                  <input type="text" id="m-inputs" name="mfrInputs" placeholder="e.g. Green coffee beans, dried mango, maize flour" required />
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="m-volume">Monthly Raw Material Requirement</label>
+                    <input type="text" id="m-volume" name="mfrVolume" placeholder="e.g. 20 tonnes / month" />
+                  </div>
+                  <div class="form-group">
+                    <label for="m-continuity">How important is supply continuity?</label>
+                    <select id="m-continuity" name="mfrContinuity">
+                      <option value="">Select...</option>
+                      <option value="critical">Critical — production depends on it</option>
+                      <option value="important">Important — prefer reliable sourcing</option>
+                      <option value="flexible">Flexible — can manage interruptions</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="m-specs">Quality Specifications</label>
+                  <textarea id="m-specs" name="mfrSpecs" rows="2" placeholder="e.g. Grade, moisture content, particle size, certifications required..."></textarea>
+                </div>
+              </div>
+
+              <!-- COMMODITY TRADER -->
+              <div id="fields-trader" class="conditional-fields" style="display:none;">
+                <div class="conditional-header"><span>Your trading profile</span></div>
+                <div class="form-group">
+                  <label for="t-commodities">Commodities You Trade *</label>
+                  <input type="text" id="t-commodities" name="traderCommodities" placeholder="e.g. Robusta Coffee, Maize, Sesame" required />
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="t-markets">Markets You Operate In</label>
+                    <input type="text" id="t-markets" name="traderMarkets" placeholder="e.g. EU, East Africa, Gulf region" />
+                  </div>
+                  <div class="form-group">
+                    <label for="t-terms">Preferred Price Terms</label>
+                    <select id="t-terms" name="traderTerms">
+                      <option value="">Select...</option>
+                      <option value="fob">FOB — Origin</option>
+                      <option value="cif">CIF — Destination</option>
+                      <option value="cfr">CFR</option>
+                      <option value="spot">Spot / Market price</option>
+                      <option value="forward">Forward contract</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="t-looking">What are you looking for from Axis?</label>
+                  <select id="t-looking" name="traderLooking">
+                    <option value="">Select...</option>
+                    <option value="direct-supply">Direct supply from origin</option>
+                    <option value="spot-cargo">Spot cargo availability</option>
+                    <option value="long-term">Long-term supply agreement</option>
+                    <option value="partner">Co-trading partnership</option>
+                    <option value="market-access">Access to East African markets</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- LOGISTICS -->
+              <div id="fields-logistics" class="conditional-fields" style="display:none;">
+                <div class="conditional-header"><span>Logistics partnership details</span></div>
+                <div class="form-group">
+                  <label for="l-services">Services You Offer *</label>
+                  <input type="text" id="l-services" name="logisticsServices" placeholder="e.g. FCL shipping, customs clearance, last-mile UK delivery" required />
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="l-routes">Lanes / Routes You Cover</label>
+                    <input type="text" id="l-routes" name="logisticsRoutes" placeholder="e.g. Mombasa → Felixstowe, Dar es Salaam → Rotterdam" />
+                  </div>
+                  <div class="form-group">
+                    <label for="l-type">Partnership Type Sought</label>
+                    <select id="l-type" name="logisticsType">
+                      <option value="">Select...</option>
+                      <option value="preferred-carrier">Preferred carrier agreement</option>
+                      <option value="customs">Customs / clearance partner</option>
+                      <option value="warehousing">UK warehousing &amp; distribution</option>
+                      <option value="full-3pl">Full 3PL solution</option>
+                      <option value="ad-hoc">Ad-hoc basis</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ── Common fields shown for all types after selection ── -->
+              <div id="commonFields" style="display:none;">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="timeline">Timeline *</label>
+                    <select id="timeline" name="timeline" required>
+                      <option value="">When do you need this?</option>
+                      <option value="urgent">Urgent — within 2 weeks</option>
+                      <option value="1-2mo">1–2 months</option>
+                      <option value="2-6mo">2–6 months</option>
+                      <option value="longterm">Long term / ongoing</option>
+                      <option value="flexible">Flexible</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="budget">Estimated Budget / Deal Size</label>
+                    <select id="budget" name="budget">
+                      <option value="">Select range...</option>
+                      <option value="<5k">Under £5,000</option>
+                      <option value="5k-20k">£5,000 – £20,000</option>
+                      <option value="20k-50k">£20,000 – £50,000</option>
+                      <option value="50k-100k">£50,000 – £100,000</option>
+                      <option value=">100k">Over £100,000</option>
+                      <option value="tbd">To Be Confirmed</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="message">Anything else we should know? *</label>
+                  <textarea id="message" name="message" rows="4" placeholder="Add any extra context, questions, or specific requirements here..." required></textarea>
+                </div>
               </div>
 
               <!-- reCAPTCHA -->
@@ -299,7 +717,7 @@
                 <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-callback="onRecaptchaSuccess"></div>
               </div>
 
-              <button type="submit" class="form-submit" id="submitBtn">Send Quotation Request</button>
+              <button type="submit" class="form-submit" id="submitBtn">Send Enquiry</button>
             </form>
           </div>
         </div>
