@@ -260,7 +260,7 @@
     });
   }
 
-  /* --- Country selection: cascading state -> region -> city -> town (real dataset) --- */
+  /* --- Country/state/city/town from synced site database --- */
   var countrySelect = document.getElementById('country');
   var regionRow = document.getElementById('regionRow');
   var stateSelect = document.getElementById('stateSelect');
@@ -279,128 +279,155 @@
     values.forEach(function(v) {
       var opt = document.createElement('option');
       if (typeof v === 'string') {
-        opt.value = v.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        opt.value = v;
         opt.textContent = v;
       } else {
-        opt.value = v[valueKey] || (v[labelKey] || '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
-        opt.textContent = v[labelKey];
+        opt.value = v[valueKey] || v[labelKey] || '';
+        opt.textContent = v[labelKey] || '';
       }
       el.appendChild(opt);
     });
   }
 
   if (countrySelect && regionRow && stateSelect && regionSelect && citySelect && townSelect) {
-    import('country-state-city').then(function(geo) {
-      var Country = geo.Country;
-      var State = geo.State;
-      var City = geo.City;
-
-      var allCountries = Country.getAllCountries();
-
-      function populateCountrySelect() {
-        var priority = ['GB', 'UG', 'KE', 'TZ', 'ET', 'RW', 'BI'];
-        var byIso = {};
-        allCountries.forEach(function(c) { byIso[c.isoCode] = c; });
-
-        countrySelect.innerHTML = '';
-        var first = document.createElement('option');
-        first.value = '';
-        first.textContent = 'Where are you based?';
-        first.disabled = true;
-        first.selected = true;
-        countrySelect.appendChild(first);
-
-        var priorityGroup = document.createElement('optgroup');
-        priorityGroup.label = 'Priority Markets';
-        priority.forEach(function(iso) {
-          if (!byIso[iso]) return;
-          var opt = document.createElement('option');
-          opt.value = byIso[iso].isoCode;
-          opt.textContent = byIso[iso].name;
-          priorityGroup.appendChild(opt);
+    fetch('/data/location-db.json')
+      .then(function(res) { return res.json(); })
+      .then(function(db) {
+        var countries = Array.isArray(db.countries) ? db.countries : [];
+        var countryByIso2 = {};
+        countries.forEach(function(c) {
+          if (c.iso2) countryByIso2[c.iso2] = c;
         });
-        countrySelect.appendChild(priorityGroup);
 
-        var allGroup = document.createElement('optgroup');
-        allGroup.label = 'All Countries';
-        allCountries
-          .slice()
-          .sort(function(a, b) { return a.name.localeCompare(b.name); })
-          .forEach(function(c) {
-            if (priority.indexOf(c.isoCode) !== -1) return;
+        var priority = ['GB', 'UG', 'KE', 'TZ', 'ET', 'RW', 'BI'];
+
+        function populateCountrySelect() {
+          countrySelect.innerHTML = '';
+
+          var first = document.createElement('option');
+          first.value = '';
+          first.textContent = 'Where are you based?';
+          first.disabled = true;
+          first.selected = true;
+          countrySelect.appendChild(first);
+
+          var priorityGroup = document.createElement('optgroup');
+          priorityGroup.label = 'Priority Markets';
+          priority.forEach(function(iso) {
+            var c = countryByIso2[iso];
+            if (!c) return;
             var opt = document.createElement('option');
-            opt.value = c.isoCode;
+            opt.value = c.iso2;
             opt.textContent = c.name;
-            allGroup.appendChild(opt);
+            priorityGroup.appendChild(opt);
           });
-        countrySelect.appendChild(allGroup);
-      }
+          countrySelect.appendChild(priorityGroup);
 
-      populateCountrySelect();
-
-      var selectedCountryIso = '';
-      var selectedStateIso = '';
-      var cachedStateCities = [];
-
-      function resetLocality() {
-        fillSelect(stateSelect, [], 'Select state or county...');
-        fillSelect(regionSelect, [], 'Select region or district...');
-        fillSelect(citySelect, [], 'Select city...');
-        fillSelect(townSelect, [], 'Select town...');
-        selectedStateIso = '';
-        cachedStateCities = [];
-      }
-
-      countrySelect.addEventListener('change', function() {
-        selectedCountryIso = this.value || '';
-        regionRow.style.display = selectedCountryIso ? 'block' : 'none';
-
-        if (!selectedCountryIso) {
-          resetLocality();
-          return;
+          var allGroup = document.createElement('optgroup');
+          allGroup.label = 'All Countries';
+          countries
+            .slice()
+            .sort(function(a, b) { return a.name.localeCompare(b.name); })
+            .forEach(function(c) {
+              if (priority.indexOf(c.iso2) !== -1) return;
+              var opt = document.createElement('option');
+              opt.value = c.iso2;
+              opt.textContent = c.name;
+              allGroup.appendChild(opt);
+            });
+          countrySelect.appendChild(allGroup);
         }
 
-        var states = State.getStatesOfCountry(selectedCountryIso) || [];
-        fillSelect(stateSelect, states, 'Select state or county...', 'isoCode', 'name');
-        fillSelect(regionSelect, [], 'Select region or district...');
-        fillSelect(citySelect, [], 'Select city...');
-        fillSelect(townSelect, [], 'Select town...');
+        function resetLocality() {
+          fillSelect(stateSelect, [], 'Select state or county...');
+          fillSelect(regionSelect, [], 'Select region or district...');
+          fillSelect(citySelect, [], 'Select city...');
+          fillSelect(townSelect, [], 'Select town...');
+        }
+
+        populateCountrySelect();
+        resetLocality();
+
+        countrySelect.addEventListener('change', function() {
+          var country = countryByIso2[this.value] || null;
+          regionRow.style.display = country ? 'block' : 'none';
+
+          if (!country) {
+            resetLocality();
+            return;
+          }
+
+          fillSelect(stateSelect, country.states || [], 'Select state or county...', 'code', 'name');
+          fillSelect(regionSelect, [], 'Select region or district...');
+          fillSelect(citySelect, [], 'Select city...');
+          fillSelect(townSelect, [], 'Select town...');
+        });
+
+        stateSelect.addEventListener('change', function() {
+          var country = countryByIso2[countrySelect.value] || null;
+          if (!country) return;
+
+          var selectedState = (country.states || []).find(function(s) {
+            return s.code === stateSelect.value || s.name === stateSelect.value;
+          });
+
+          var stateName = selectedState ? selectedState.name : '';
+          var cities = selectedState && Array.isArray(selectedState.cities) && selectedState.cities.length
+            ? selectedState.cities
+            : (country.cities || []);
+
+          fillSelect(regionSelect, stateName ? [stateName] : [], 'Select region or district...');
+          fillSelect(citySelect, cities, 'Select city...');
+          fillSelect(townSelect, [], 'Select town...');
+        });
+
+        regionSelect.addEventListener('change', function() {
+          var country = countryByIso2[countrySelect.value] || null;
+          if (!country) return;
+
+          var selectedState = (country.states || []).find(function(s) {
+            return s.code === stateSelect.value || s.name === stateSelect.value;
+          });
+
+          var cities = selectedState && Array.isArray(selectedState.cities) && selectedState.cities.length
+            ? selectedState.cities
+            : (country.cities || []);
+
+          fillSelect(citySelect, cities, 'Select city...');
+          fillSelect(townSelect, [], 'Select town...');
+        });
+
+        citySelect.addEventListener('change', function() {
+          var country = countryByIso2[countrySelect.value] || null;
+          if (!country) return;
+
+          var selectedState = (country.states || []).find(function(s) {
+            return s.code === stateSelect.value || s.name === stateSelect.value;
+          });
+
+          var cities = selectedState && Array.isArray(selectedState.cities) && selectedState.cities.length
+            ? selectedState.cities
+            : (country.cities || []);
+
+          var selectedCity = citySelect.value;
+          var towns = cities.filter(function(name) {
+            return name !== selectedCity;
+          }).slice(0, 1000);
+
+          fillSelect(townSelect, towns, 'Select town...');
+        });
+
+        if (countrySelect.value) {
+          countrySelect.dispatchEvent(new Event('change'));
+        }
+      })
+      .catch(function() {
+        // If sync file is unavailable, keep existing HTML country list.
+        regionRow.style.display = 'none';
+        countrySelect.addEventListener('change', function() {
+          regionRow.style.display = this.value ? 'block' : 'none';
+        });
       });
-
-      stateSelect.addEventListener('change', function() {
-        selectedStateIso = this.value || '';
-        fillSelect(regionSelect, [], 'Select region or district...');
-        fillSelect(citySelect, [], 'Select city...');
-        fillSelect(townSelect, [], 'Select town...');
-
-        if (!selectedCountryIso || !selectedStateIso) return;
-
-        cachedStateCities = City.getCitiesOfState(selectedCountryIso, selectedStateIso) || [];
-        var stateLabel = stateSelect.options[stateSelect.selectedIndex] ? stateSelect.options[stateSelect.selectedIndex].textContent.trim() : '';
-        var regionNames = stateLabel ? [stateLabel] : [];
-
-        fillSelect(regionSelect, regionNames, 'Select region or district...');
-        fillSelect(citySelect, cachedStateCities.map(function(c) { return c.name; }), 'Select city...');
-      });
-
-      regionSelect.addEventListener('change', function() {
-        fillSelect(citySelect, cachedStateCities.map(function(c) { return c.name; }), 'Select city...');
-        fillSelect(townSelect, [], 'Select town...');
-      });
-
-      citySelect.addEventListener('change', function() {
-        var selectedCity = this.options[this.selectedIndex] ? this.options[this.selectedIndex].textContent.trim() : '';
-        var localityPool = cachedStateCities.filter(function(c) {
-          return c.name !== selectedCity;
-        }).map(function(c) { return c.name; });
-
-        var uniqueLocalities = Array.from(new Set(localityPool)).sort(function(a, b) {
-          return a.localeCompare(b);
-        }).slice(0, 500);
-
-        fillSelect(townSelect, uniqueLocalities, 'Select town...');
-      });
-    });
   }
 
   /* --- Product picker: populate grade sub-dropdown on selection --- */
