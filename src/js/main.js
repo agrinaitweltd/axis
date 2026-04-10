@@ -189,59 +189,140 @@
     var allConditionalSections = [
       'fields-farmer', 'fields-cooperative', 'fields-wholesale',
       'fields-importer', 'fields-exporter', 'fields-retailer',
-      'fields-manufacturer', 'fields-trader', 'fields-logistics'
+      'fields-manufacturer', 'fields-trader', 'fields-logistics',
+      'fields-other'
     ];
     var commonFields = document.getElementById('commonFields');
+    var budgetGroup = document.getElementById('budgetGroup');
+    var showBudgetFor = ['wholesale', 'importer', 'exporter', 'retailer', 'manufacturer', 'trader'];
+    var sectionMap = {
+      farmer:       'fields-farmer',
+      cooperative:  'fields-cooperative',
+      wholesale:    'fields-wholesale',
+      importer:     'fields-importer',
+      exporter:     'fields-exporter',
+      retailer:     'fields-retailer',
+      manufacturer: 'fields-manufacturer',
+      trader:       'fields-trader',
+      logistics:    'fields-logistics',
+      other:        'fields-other'
+    };
 
     function showConditionalSection(value) {
-      // Hide all conditional sections
       allConditionalSections.forEach(function(id) {
         var el = document.getElementById(id);
         if (el) el.style.display = 'none';
       });
-
-      // Show matching section
-      var sectionMap = {
-        farmer: 'fields-farmer',
-        cooperative: 'fields-cooperative',
-        wholesale: 'fields-wholesale',
-        importer: 'fields-importer',
-        exporter: 'fields-exporter',
-        retailer: 'fields-retailer',
-        manufacturer: 'fields-manufacturer',
-        trader: 'fields-trader',
-        logistics: 'fields-logistics'
-      };
 
       if (sectionMap[value]) {
         var target = document.getElementById(sectionMap[value]);
         if (target) {
           target.style.display = 'block';
           target.classList.remove('cond-animate');
-          // Force reflow then re-add class to re-trigger animation
           void target.offsetWidth;
           target.classList.add('cond-animate');
         }
       }
 
-      // Show common fields for any selection
+      // Hide commonFields for 'other' (has its own enquiry textarea)
       if (commonFields) {
-        commonFields.style.display = value ? 'block' : 'none';
+        commonFields.style.display = (value && value !== 'other') ? 'block' : 'none';
+      }
+
+      // Budget only for buyer / trade types
+      if (budgetGroup) {
+        budgetGroup.style.display = showBudgetFor.indexOf(value) !== -1 ? 'block' : 'none';
       }
     }
 
-    // Handle card radio click — add .selected to parent label
     var bizCards = bizTypeGrid.querySelectorAll('.biz-card input[type="radio"]');
     bizCards.forEach(function(radio) {
       radio.addEventListener('change', function() {
-        // Remove selected from all cards
+        var val = this.value;
         bizTypeGrid.querySelectorAll('.biz-card').forEach(function(card) {
           card.classList.remove('selected');
         });
-        // Mark chosen card
         this.closest('.biz-card').classList.add('selected');
-        showConditionalSection(this.value);
+        showConditionalSection(val);
+
+        // Auto-scroll to the revealed section
+        setTimeout(function() {
+          var scrollTarget = sectionMap[val] ? document.getElementById(sectionMap[val]) : null;
+          if (!scrollTarget && val !== 'other') scrollTarget = commonFields;
+          if (scrollTarget) {
+            var navbar = document.getElementById('navbar');
+            var offset = navbar ? navbar.offsetHeight + 20 : 90;
+            var top = scrollTarget.getBoundingClientRect().top + window.pageYOffset - offset;
+            window.scrollTo({ top: top, behavior: 'smooth' });
+          }
+        }, 60);
       });
+    });
+  }
+
+  /* --- Country selection: show region / city row --- */
+  var countrySelect = document.getElementById('country');
+  var regionRow = document.getElementById('regionRow');
+  if (countrySelect && regionRow) {
+    countrySelect.addEventListener('change', function() {
+      regionRow.style.display = this.value ? 'grid' : 'none';
+    });
+  }
+
+  /* --- Product picker: populate grade sub-dropdown on selection --- */
+  var productGradeMap = {
+    'coffee-arabica':  ['Washed / Fully Washed', 'Natural / Dry Process', 'Honey Process', 'Specialty Grade (SCA 80+)', 'Fine Cup (SCA 75–79)', 'Commercial Grade'],
+    'coffee-robusta':  ['Robusta Grade 1 (Screen 15+)', 'Robusta Grade 2', 'FAQ (Fair Average Quality)', 'Washed Robusta', 'Natural Robusta'],
+    'coffee-specialty':['Single Origin Micro-lot', 'Competition Grade (SCA 85+)', 'Cupping Score 80–84'],
+    'avocado':         ['Grade 1 Export — Hass', 'Grade 2 Export — Hass', 'Fuerte Grade 1', 'Mixed / Open to Spec'],
+    'mango':           ['Grade A Export (Tommy Atkins)', 'Grade A Export (Apple Mango)', 'Grade A Export (Kent / Ngowe)', 'Grade B / Processing'],
+    'pineapple':       ['Grade A Export — Smooth Cayenne', 'Grade A Export — MD2', 'Grade B'],
+    'banana':          ['Class 1 Export (Cavendish)', 'Class 2', 'Green / Unripe Export Ready'],
+    'passion-fruit':   ['Grade A — Purple Passion', 'Grade A — Yellow Passion', 'Grade B'],
+    'jackfruit':       ['Young Green (culinary use)', 'Ripe Grade A', 'Processing Grade'],
+    'papaya':          ['Grade A Export (Solo / Sunrise)', 'Grade B', 'Processing Grade'],
+    'maize':           ['White Maize Grade 1 (≤12.5% moisture)', 'Yellow Maize Grade 1', 'Grade 2', 'Feed Grade'],
+    'sorghum':         ['White Sorghum Grade 1', 'White Sorghum Grade 2', 'Red Sorghum', 'Tannin-free Sorghum'],
+    'millet':          ['Finger Millet Grade 1', 'Pearl Millet Grade 1', 'Grade 2'],
+    'sesame':          ['Hulled White Grade 1', 'Hulled White Grade 2', 'Unhulled Natural', 'Black Sesame Grade 1'],
+    'beans':           ['Rose Coco Grade 1', 'Red Kidney Beans Grade 1', 'Black-eye Peas Grade 1', 'Green Grams (Mung) Grade 1'],
+    'groundnuts':      ['Runner Grade 1 (Blanched)', 'Virginia Grade 1', 'Grade 2', 'Oil Grade'],
+    'cowpeas':         ['Grade 1', 'Grade 2', 'Mixed'],
+    'soybeans':        ['Non-GMO Grade 1', 'Grade 1', 'Oil Grade'],
+    'rice':            ['Long Grain White — Grade A', 'Parboiled Grade 1', 'Brown Rice Grade 1'],
+    'vanilla':         ['Grade A — Gourmet (Whole Pods)', 'Grade B — Extract Quality', 'Green / Fresh Vanilla'],
+    'ginger':          ['Fresh Grade 1', 'Dried Grade 1 (Sliced)', 'Ground / Powder Grade 1'],
+    'turmeric':        ['Grade 1 (≥3% curcumin)', 'Grade 2', 'Organic Certified'],
+    'chilli':          ['Fresh Grade A', 'Dried Whole Grade 1', 'Crushed / Flakes Grade 1'],
+    'coriander':       ['Whole Seeds Grade 1', 'Ground Grade 1'],
+    'moringa':         ['Leaf Powder Grade 1', 'Dried Leaves Grade 1', 'Seed Grade 1'],
+    'cardamom':        ['Small Green Grade 1', 'Bold Green Grade 1', 'Bleached White'],
+    'shea':            ['Grade A Refined (RBD)', 'Grade B Unrefined (Raw)', 'Raw Shea Nuts'],
+    'sunflower':       ['Sunflower Seeds Grade 1', 'Crude Sunflower Oil (CSO)'],
+    'palm':            ['Crude Palm Oil (CPO)', 'Refined Palm Oil (RBD)'],
+    'cassava':         ['Fresh Grade A', 'Dried / Chips Grade 1', 'Tapioca Starch Grade 1'],
+    'sweet-potato':    ['Grade A Export', 'Grade B'],
+    'plantain':        ['Green Grade A Export', 'Grade B']
+  };
+
+  var productFormEl = document.getElementById('contactForm');
+  if (productFormEl) {
+    productFormEl.addEventListener('change', function(e) {
+      if (!e.target.classList.contains('product-select')) return;
+      var sel = e.target;
+      var pfx = sel.id.replace(/-product$/, '');
+      var gradeWrap = document.getElementById(pfx + '-grade-wrap');
+      var gradeSelect = document.getElementById(pfx + '-grade');
+      if (!gradeWrap || !gradeSelect) return;
+      var grades = productGradeMap[sel.value];
+      if (grades && grades.length) {
+        gradeSelect.innerHTML = '<option value="">Select grade...</option>' +
+          grades.map(function(g) { return '<option value="' + g + '">' + g + '</option>'; }).join('');
+        gradeWrap.style.display = '';
+      } else {
+        gradeWrap.style.display = 'none';
+        gradeSelect.innerHTML = '<option value="">Select grade...</option>';
+      }
     });
   }
 

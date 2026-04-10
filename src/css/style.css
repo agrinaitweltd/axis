@@ -1723,6 +1723,22 @@ footer {
   color: var(--green-700);
 }
 
+/* ── Product Picker (dual dropdown: product + grade) ── */
+.product-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.product-picker .form-group {
+  flex: 1 1 200px;
+  min-width: 0;
+  margin-bottom: 0;
+  animation: none !important;
+  opacity: 1 !important;
+}
+
 /* ── Business Type Card Grid ── */
 .biz-type-group {
   margin-bottom: 1rem;
