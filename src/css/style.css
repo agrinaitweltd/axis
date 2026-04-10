@@ -1647,16 +1647,19 @@ footer {
 
 .form-group {
   margin-bottom: 1.25rem;
+}
+
+.contact-form-wrapper .form-group {
   animation: slideInForm 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   opacity: 0;
 }
 
-.form-group:nth-child(1) { animation-delay: 0ms; }
-.form-group:nth-child(2) { animation-delay: 60ms; }
-.form-group:nth-child(3) { animation-delay: 120ms; }
-.form-group:nth-child(4) { animation-delay: 180ms; }
-.form-group:nth-child(5) { animation-delay: 240ms; }
-.form-group:nth-child(n+6) { animation-delay: 300ms; }
+.contact-form-wrapper .form-group:nth-child(1) { animation-delay: 0ms; }
+.contact-form-wrapper .form-group:nth-child(2) { animation-delay: 60ms; }
+.contact-form-wrapper .form-group:nth-child(3) { animation-delay: 120ms; }
+.contact-form-wrapper .form-group:nth-child(4) { animation-delay: 180ms; }
+.contact-form-wrapper .form-group:nth-child(5) { animation-delay: 240ms; }
+.contact-form-wrapper .form-group:nth-child(n+6) { animation-delay: 300ms; }
 
 @keyframes slideInForm {
   from {
