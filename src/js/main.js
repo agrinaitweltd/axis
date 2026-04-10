@@ -338,11 +338,15 @@
           countrySelect.appendChild(allGroup);
         }
 
+        // Hide region/town selects — data source only has country→state→city
+        var regionGroup = regionSelect ? regionSelect.closest('.form-group') : null;
+        var townGroup = townSelect ? townSelect.closest('.form-group') : null;
+        if (regionGroup) regionGroup.style.display = 'none';
+        if (townGroup) townGroup.style.display = 'none';
+
         function resetLocality() {
           fillSelect(stateSelect, [], 'Select state or county...');
-          fillSelect(regionSelect, [], 'Select region or district...');
           fillSelect(citySelect, [], 'Select city...');
-          fillSelect(townSelect, [], 'Select town...');
         }
 
         populateCountrySelect();
@@ -357,10 +361,13 @@
             return;
           }
 
-          fillSelect(stateSelect, country.states || [], 'Select state or county...', 'code', 'name');
-          fillSelect(regionSelect, [], 'Select region or district...');
-          fillSelect(citySelect, [], 'Select city...');
-          fillSelect(townSelect, [], 'Select town...');
+          var sortedStates = (country.states || []).slice().sort(function(a, b) {
+            return a.name.localeCompare(b.name);
+          });
+          var sortedCities = (country.cities || []).slice().sort();
+
+          fillSelect(stateSelect, sortedStates, 'Select state or county...', 'code', 'name');
+          fillSelect(citySelect, sortedCities, 'Select city...');
         });
 
         stateSelect.addEventListener('change', function() {
@@ -371,50 +378,12 @@
             return s.code === stateSelect.value || s.name === stateSelect.value;
           });
 
-          var stateName = selectedState ? selectedState.name : '';
-          var cities = selectedState && Array.isArray(selectedState.cities) && selectedState.cities.length
-            ? selectedState.cities
-            : (country.cities || []);
-
-          fillSelect(regionSelect, stateName ? [stateName] : [], 'Select region or district...');
-          fillSelect(citySelect, cities, 'Select city...');
-          fillSelect(townSelect, [], 'Select town...');
-        });
-
-        regionSelect.addEventListener('change', function() {
-          var country = countryByIso2[countrySelect.value] || null;
-          if (!country) return;
-
-          var selectedState = (country.states || []).find(function(s) {
-            return s.code === stateSelect.value || s.name === stateSelect.value;
-          });
-
-          var cities = selectedState && Array.isArray(selectedState.cities) && selectedState.cities.length
-            ? selectedState.cities
-            : (country.cities || []);
+          // Use state-level cities if available, otherwise fall back to all country cities
+          var cities = selectedState && Array.isArray(selectedState.cities) && selectedState.cities.length > 0
+            ? selectedState.cities.slice().sort()
+            : (country.cities || []).slice().sort();
 
           fillSelect(citySelect, cities, 'Select city...');
-          fillSelect(townSelect, [], 'Select town...');
-        });
-
-        citySelect.addEventListener('change', function() {
-          var country = countryByIso2[countrySelect.value] || null;
-          if (!country) return;
-
-          var selectedState = (country.states || []).find(function(s) {
-            return s.code === stateSelect.value || s.name === stateSelect.value;
-          });
-
-          var cities = selectedState && Array.isArray(selectedState.cities) && selectedState.cities.length
-            ? selectedState.cities
-            : (country.cities || []);
-
-          var selectedCity = citySelect.value;
-          var towns = cities.filter(function(name) {
-            return name !== selectedCity;
-          }).slice(0, 1000);
-
-          fillSelect(townSelect, towns, 'Select town...');
         });
 
         if (countrySelect.value) {
@@ -422,7 +391,7 @@
         }
       })
       .catch(function() {
-        // If sync file is unavailable, keep existing HTML country list.
+        // If sync file is unavailable, just show/hide the region row
         regionRow.style.display = 'none';
         countrySelect.addEventListener('change', function() {
           regionRow.style.display = this.value ? 'block' : 'none';
