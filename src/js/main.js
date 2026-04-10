@@ -183,4 +183,73 @@
     });
   }
 
-})();
+  /* --- Conditional form fields based on business type --- */
+  var businessTypeSelect = document.getElementById('businessType');
+  if (businessTypeSelect) {
+    var wholesaleFields = document.getElementById('wholesaleFields');
+    var exportFields = document.getElementById('exportFields');
+    var producerFields = document.getElementById('producerFields');
+
+    function updateConditionalFields() {
+      var selectedType = businessTypeSelect.value;
+      
+      if (wholesaleFields) wholesaleFields.style.display = 'none';
+      if (exportFields) exportFields.style.display = 'none';
+      if (producerFields) producerFields.style.display = 'none';
+
+      if (selectedType === 'wholesale' || selectedType === 'retail' || selectedType === 'import') {
+        if (wholesaleFields) wholesaleFields.style.display = 'block';
+      } else if (selectedType === 'export') {
+        if (exportFields) exportFields.style.display = 'block';
+      } else if (selectedType === 'producer') {
+        if (producerFields) producerFields.style.display = 'block';
+      }
+    }
+
+    businessTypeSelect.addEventListener('change', updateConditionalFields);
+    updateConditionalFields();
+  }
+
+  /* --- reCAPTCHA success callback --- */
+  window.onRecaptchaSuccess = function() {
+    var submitBtn = document.getElementById('submitBtn');
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+    }
+  };
+
+  /* --- Form submission handler --- */
+  var contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    var submitBtn = document.getElementById('submitBtn');
+    
+    contactForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      
+      // Check if reCAPTCHA is verified (in real app, this would be verified server-side)
+      var recaptchaResponse = grecaptcha.getResponse();
+      if (!recaptchaResponse) {
+        alert('Please complete the reCAPTCHA verification.');
+        return;
+      }
+
+      // Show success state
+      if (submitBtn) {
+        var originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Message Sent! ✓';
+        submitBtn.style.background = 'var(--green-700)';
+        submitBtn.disabled = true;
+
+        setTimeout(function () {
+          submitBtn.textContent = originalText;
+          submitBtn.style.background = '';
+          submitBtn.disabled = false;
+          contactForm.reset();
+          grecaptcha.reset();
+        }, 3000);
+      }
+    });
+  }
+
+});

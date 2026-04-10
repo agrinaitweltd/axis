@@ -1645,7 +1645,63 @@ footer {
   border: 1px solid var(--border);
 }
 
-.form-group { margin-bottom: 1.25rem; }
+.form-group {
+  margin-bottom: 1.25rem;
+  animation: slideInForm 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.form-group:nth-child(1) { animation-delay: 0ms; }
+.form-group:nth-child(2) { animation-delay: 60ms; }
+.form-group:nth-child(3) { animation-delay: 120ms; }
+.form-group:nth-child(4) { animation-delay: 180ms; }
+.form-group:nth-child(5) { animation-delay: 240ms; }
+.form-group:nth-child(n+6) { animation-delay: 300ms; }
+
+@keyframes slideInForm {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.conditional-fields {
+  animation: fadeInConditional 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  max-height: 500px;
+  overflow: hidden;
+}
+
+.conditional-fields[style*="display: none"] {
+  display: none !important;
+  max-height: 0;
+  animation: fadeOutConditional 0.35s ease forwards;
+}
+
+@keyframes fadeInConditional {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+@keyframes fadeOutConditional {
+  from {
+    opacity: 1;
+    max-height: 500px;
+  }
+  to {
+    opacity: 0;
+    max-height: 0;
+  }
+}
 
 .form-group label {
   display: block;
@@ -1669,6 +1725,14 @@ footer {
   transition: border-color var(--transition), box-shadow var(--transition);
   outline: none;
   resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus,
+.form-group input::placeholder,
+.form-group select::placeholder {
+  transition: border-color 0.25s, box-shadow 0.25s, background-color 0.25s;
 }
 
 .form-group input:focus,
@@ -1953,7 +2017,7 @@ footer {
 
   /* ---- Nav ---- */
   .nav-main-inner { padding: 0 1.25rem; }
-  .logo-wrapper { height: 68px; width: 200px; }
+  .logo-wrapper { height: 80px; width: 240px; }
   .hamburger span { width: 24px; height: 2.5px; }
   .mobile-nav a, .mobile-nav button {
     padding: 1rem 1.5rem;
@@ -2041,5 +2105,5 @@ footer {
   .stats-grid { grid-template-columns: 1fr; }
   .about-stats { grid-template-columns: 1fr; }
   .hero h1 { font-size: clamp(1.8rem, 9vw, 2.4rem); }
-  .logo-wrapper { height: 60px; width: 180px; }
+  .logo-wrapper { height: 76px; width: 220px; }
 }

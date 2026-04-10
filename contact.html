@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700;1,800&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/png" href="/public/logo1.png" sizes="512x512" />
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <link rel="apple-touch-icon" sizes="180x180" href="/public/logo1.png" />
   <link rel="stylesheet" href="/src/css/style.css" />
 </head>
@@ -205,12 +206,100 @@
                 <input type="text" id="quantity" name="quantity" placeholder="e.g. 5 tonnes, 1 container (40ft), 100kg, etc." />
               </div>
 
-              <div class="form-group">
-                <label for="message">Additional Details *</label>
-                <textarea id="message" name="message" rows="4" placeholder="Please describe your specific requirements, timeline, quality specifications, and any other relevant details..." required></textarea>
+              <!-- Conditional fields based on business type -->
+              <div id="wholesaleFields" class="conditional-fields" style="display:none;">
+                <div class="form-group">
+                  <label for="storageRequirements">Do you have cold storage facilities? *</label>
+                  <select id="storageRequirements" name="storageRequirements">
+                    <option value="">Select...</option>
+                    <option value="yes">Yes, Full Cold Chain</option>
+                    <option value="partial">Partial Cold Storage</option>
+                    <option value="ambient">Ambient Storage Only</option>
+                    <option value="no">No Storage Facilities</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="certifications">Required Certifications (if any)</label>
+                  <input type="text" id="certifications" name="certifications" placeholder="e.g. Organic, Fairtrade, GlobalGAP, etc." />
+                </div>
               </div>
 
-              <button type="submit" class="form-submit">Send Message</button>
+              <div id="exportFields" class="conditional-fields" style="display:none;">
+                <div class="form-group">
+                  <label for="ageOfBusiness">How long has your business been operating? *</label>
+                  <select id="ageOfBusiness" name="ageOfBusiness">
+                    <option value="">Select...</option>
+                    <option value="<1">Less than 1 year</option>
+                    <option value="1-3">1-3 years</option>
+                    <option value="3-5">3-5 years</option>
+                    <option value=">5">More than 5 years</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="shippingPreference">Preferred Shipping Method *</label>
+                  <select id="shippingPreference" name="shippingPreference">
+                    <option value="">Select...</option>
+                    <option value="fcl">Full Container Load (FCL)</option>
+                    <option value="lcl">Less Than Container Load (LCL)</option>
+                    <option value="air">Air Freight</option>
+                    <option value="flexible">Flexible / Negotiate</option>
+                  </select>
+                </div>
+              </div>
+
+              <div id="producerFields" class="conditional-fields" style="display:none;">
+                <div class="form-group">
+                  <label for="farmSize">Size of Your Farm / Operation *</label>
+                  <select id="farmSize" name="farmSize">
+                    <option value="">Select...</option>
+                    <option value="<5">Less than 5 hectares</option>
+                    <option value="5-20">5-20 hectares</option>
+                    <option value="20-50">20-50 hectares</option>
+                    <option value=">50">More than 50 hectares</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="yearsOfExperience">Years of experience with this product *</label>
+                  <input type="number" id="yearsOfExperience" name="yearsOfExperience" placeholder="e.g. 5" min="0" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="timeline">Required Timeline *</label>
+                <select id="timeline" name="timeline" required>
+                  <option value="">Select delivery timeline...</option>
+                  <option value="urgent">Urgent (within 2 weeks)</option>
+                  <option value="short">Short Term (1-2 months)</option>
+                  <option value="medium">Medium Term (2-6 months)</option>
+                  <option value="longterm">Long Term / Recurring</option>
+                  <option value="flexible">Flexible Timeline</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="budget">Estimated Budget Range</label>
+                <select id="budget" name="budget">
+                  <option value="">Select budget range...</option>
+                  <option value="<5k">Less than £5,000</option>
+                  <option value="5k-20k">£5,000 - £20,000</option>
+                  <option value="20k-50k">£20,000 - £50,000</option>
+                  <option value="50k-100k">£50,000 - £100,000</option>
+                  <option value=">100k">Above £100,000</option>
+                  <option value="tbd">To Be Determined</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="message">Additional Details & Specific Requirements *</label>
+                <textarea id="message" name="message" rows="4" placeholder="Please describe your specific requirements, quality standards, volume, delivery preferences, and any other relevant details..." required></textarea>
+              </div>
+
+              <!-- reCAPTCHA -->
+              <div class="form-group" style="margin: 1.5rem 0;">
+                <div class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-callback="onRecaptchaSuccess"></div>
+              </div>
+
+              <button type="submit" class="form-submit" id="submitBtn">Send Quotation Request</button>
             </form>
           </div>
         </div>
