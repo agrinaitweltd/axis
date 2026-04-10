@@ -260,12 +260,253 @@
     });
   }
 
-  /* --- Country selection: show region / city row --- */
+  /* --- Country selection: cascading state -> region -> city -> town --- */
   var countrySelect = document.getElementById('country');
   var regionRow = document.getElementById('regionRow');
-  if (countrySelect && regionRow) {
+  var stateSelect = document.getElementById('stateSelect');
+  var regionSelect = document.getElementById('regionSelect');
+  var citySelect = document.getElementById('citySelect');
+  var townSelect = document.getElementById('townSelect');
+
+  var locationMap = {
+    'united-kingdom': {
+      'England': {
+        'Greater London': {
+          'London': ['Camden', 'Westminster', 'Croydon', 'Hackney']
+        },
+        'West Midlands': {
+          'Birmingham': ['Edgbaston', 'Selly Oak', 'Erdington', 'Aston']
+        },
+        'Greater Manchester': {
+          'Manchester': ['Salford', 'Stockport', 'Oldham', 'Bolton']
+        }
+      },
+      'Scotland': {
+        'Central Belt': {
+          'Glasgow': ['Paisley', 'East Kilbride', 'Cumbernauld', 'Motherwell']
+        },
+        'Lothian': {
+          'Edinburgh': ['Leith', 'Musselburgh', 'Dalkeith', 'Penicuik']
+        }
+      },
+      'Wales': {
+        'South Wales': {
+          'Cardiff': ['Barry', 'Penarth', 'Caerphilly', 'Pontypridd']
+        }
+      },
+      'Northern Ireland': {
+        'County Antrim': {
+          'Belfast': ['Lisburn', 'Newtownabbey', 'Bangor', 'Carrickfergus']
+        }
+      }
+    },
+    'uganda': {
+      'Central Region': {
+        'Kampala Area': {
+          'Kampala': ['Nansana', 'Kira', 'Makindye', 'Nakawa']
+        },
+        'Mukono-Buikwe Belt': {
+          'Mukono': ['Seeta', 'Njeru', 'Lugazi', 'Buikwe']
+        }
+      },
+      'Western Region': {
+        'Ankole': {
+          'Mbarara': ['Bushenyi', 'Ntungamo', 'Isingiro', 'Ibanda']
+        },
+        'Kigezi': {
+          'Kabale': ['Kisoro', 'Rukungiri', 'Kanungu', 'Rubanda']
+        }
+      },
+      'Eastern Region': {
+        'Busoga': {
+          'Jinja': ['Iganga', 'Bugiri', 'Mayuge', 'Kamuli']
+        },
+        'Elgon': {
+          'Mbale': ['Bududa', 'Sironko', 'Manafwa', 'Kapchorwa']
+        }
+      },
+      'Northern Region': {
+        'Acholi': {
+          'Gulu': ['Kitgum', 'Pader', 'Amuru', 'Nwoya']
+        },
+        'Lango': {
+          'Lira': ['Dokolo', 'Apac', 'Otuke', 'Kole']
+        }
+      }
+    },
+    'kenya': {
+      'Nairobi County': {
+        'Nairobi Metro': {
+          'Nairobi': ['Westlands', 'Kasarani', 'Embakasi', 'Kibra']
+        }
+      },
+      'Rift Valley': {
+        'North Rift': {
+          'Eldoret': ['Iten', 'Kitale', 'Kapsabet', 'Turbo']
+        },
+        'South Rift': {
+          'Nakuru': ['Naivasha', 'Molo', 'Njoro', 'Gilgil']
+        }
+      },
+      'Central Kenya': {
+        'Mount Kenya Region': {
+          'Nyeri': ['Karatina', 'Nanyuki', 'Kiganjo', 'Othaya']
+        }
+      },
+      'Coast Region': {
+        'Coastal Belt': {
+          'Mombasa': ['Kilifi', 'Malindi', 'Kwale', 'Likoni']
+        }
+      }
+    },
+    'tanzania': {
+      'Dar es Salaam': {
+        'Ilala-Kinondoni-Temeke': {
+          'Dar es Salaam': ['Kigamboni', 'Ubungo', 'Mbezi', 'Kawe']
+        }
+      },
+      'Arusha Region': {
+        'Northern Highlands': {
+          'Arusha': ['Meru', 'Karatu', 'Monduli', 'Usa River']
+        }
+      },
+      'Mwanza Region': {
+        'Lake Zone': {
+          'Mwanza': ['Ilemela', 'Sengerema', 'Geita', 'Misungwi']
+        }
+      }
+    },
+    'ethiopia': {
+      'Addis Ababa': {
+        'City Administration': {
+          'Addis Ababa': ['Bole', 'Yeka', 'Kirkos', 'Arada']
+        }
+      },
+      'Oromia': {
+        'Central Oromia': {
+          'Adama': ['Bishoftu', 'Mojo', 'Asella', 'Sebeta']
+        },
+        'Western Oromia': {
+          'Nekemte': ['Ambo', 'Gimbi', 'Shambu', 'Dembi Dolo']
+        }
+      },
+      'Amhara': {
+        'Northwest Amhara': {
+          'Bahir Dar': ['Gondar', 'Debre Tabor', 'Debre Markos', 'Woldiya']
+        }
+      }
+    },
+    'rwanda': {
+      'Kigali City': {
+        'Kigali Province': {
+          'Kigali': ['Gasabo', 'Kicukiro', 'Nyarugenge', 'Gisozi']
+        }
+      },
+      'Northern Province': {
+        'Musanze Belt': {
+          'Musanze': ['Rulindo', 'Burera', 'Gakenke', 'Kinigi']
+        }
+      },
+      'Eastern Province': {
+        'Kayonza Belt': {
+          'Rwamagana': ['Kayonza', 'Nyagatare', 'Kirehe', 'Kibungo']
+        }
+      }
+    },
+    'burundi': {
+      'Bujumbura Mairie': {
+        'Bujumbura Urban': {
+          'Bujumbura': ['Ngagara', 'Kinama', 'Nyakabiga', 'Kanyosha']
+        }
+      },
+      'Gitega Province': {
+        'Central Burundi': {
+          'Gitega': ['Karuzi', 'Ngozi', 'Muramvya', 'Mwaro']
+        }
+      }
+    }
+  };
+
+  function fillSelect(el, values, placeholder) {
+    if (!el) return;
+    el.innerHTML = '';
+    var first = document.createElement('option');
+    first.value = '';
+    first.textContent = placeholder;
+    el.appendChild(first);
+    values.forEach(function(v) {
+      var opt = document.createElement('option');
+      opt.value = v.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+      opt.textContent = v;
+      el.appendChild(opt);
+    });
+  }
+
+  if (countrySelect && regionRow && stateSelect && regionSelect && citySelect && townSelect) {
+    function resetLocality() {
+      fillSelect(stateSelect, [], 'Select state or county...');
+      fillSelect(regionSelect, [], 'Select region or district...');
+      fillSelect(citySelect, [], 'Select city...');
+      fillSelect(townSelect, [], 'Select town...');
+    }
+
     countrySelect.addEventListener('change', function() {
-      regionRow.style.display = this.value ? 'grid' : 'none';
+      var country = this.value;
+      regionRow.style.display = country ? 'block' : 'none';
+      if (!country) {
+        resetLocality();
+        return;
+      }
+
+      var states = locationMap[country]
+        ? Object.keys(locationMap[country])
+        : ['State / Province A', 'State / Province B', 'State / Province C', 'Other'];
+      fillSelect(stateSelect, states, 'Select state or county...');
+      fillSelect(regionSelect, [], 'Select region or district...');
+      fillSelect(citySelect, [], 'Select city...');
+      fillSelect(townSelect, [], 'Select town...');
+    });
+
+    stateSelect.addEventListener('change', function() {
+      var country = countrySelect.value;
+      var stateName = this.options[this.selectedIndex] ? this.options[this.selectedIndex].text : '';
+      var regions = [];
+      if (locationMap[country] && locationMap[country][stateName]) {
+        regions = Object.keys(locationMap[country][stateName]);
+      } else if (country) {
+        regions = ['Region / District 1', 'Region / District 2', 'Region / District 3', 'Other'];
+      }
+      fillSelect(regionSelect, regions, 'Select region or district...');
+      fillSelect(citySelect, [], 'Select city...');
+      fillSelect(townSelect, [], 'Select town...');
+    });
+
+    regionSelect.addEventListener('change', function() {
+      var country = countrySelect.value;
+      var stateName = stateSelect.options[stateSelect.selectedIndex] ? stateSelect.options[stateSelect.selectedIndex].text : '';
+      var regionName = this.options[this.selectedIndex] ? this.options[this.selectedIndex].text : '';
+      var cities = [];
+      if (locationMap[country] && locationMap[country][stateName] && locationMap[country][stateName][regionName]) {
+        cities = Object.keys(locationMap[country][stateName][regionName]);
+      } else if (country) {
+        cities = ['City 1', 'City 2', 'City 3', 'Other'];
+      }
+      fillSelect(citySelect, cities, 'Select city...');
+      fillSelect(townSelect, [], 'Select town...');
+    });
+
+    citySelect.addEventListener('change', function() {
+      var country = countrySelect.value;
+      var stateName = stateSelect.options[stateSelect.selectedIndex] ? stateSelect.options[stateSelect.selectedIndex].text : '';
+      var regionName = regionSelect.options[regionSelect.selectedIndex] ? regionSelect.options[regionSelect.selectedIndex].text : '';
+      var cityName = this.options[this.selectedIndex] ? this.options[this.selectedIndex].text : '';
+      var towns = [];
+      if (locationMap[country] && locationMap[country][stateName] && locationMap[country][stateName][regionName] && locationMap[country][stateName][regionName][cityName]) {
+        towns = locationMap[country][stateName][regionName][cityName];
+      } else if (country) {
+        towns = ['Town 1', 'Town 2', 'Town 3', 'Other'];
+      }
+      fillSelect(townSelect, towns, 'Select town...');
     });
   }
 
@@ -302,11 +543,78 @@
     'palm':            ['Crude Palm Oil (CPO)', 'Refined Palm Oil (RBD)'],
     'cassava':         ['Fresh Grade A', 'Dried / Chips Grade 1', 'Tapioca Starch Grade 1'],
     'sweet-potato':    ['Grade A Export', 'Grade B'],
-    'plantain':        ['Green Grade A Export', 'Grade B']
+    'plantain':        ['Green Grade A Export', 'Grade B'],
+    'cocoa':           ['Grade 1 Fermented', 'Grade 2 Fermented', 'Unfermented'],
+    'tea':             ['BP1', 'PF1', 'Dust', 'Orthodox Grade'],
+    'macadamia':       ['Kernel Style 1', 'Kernel Style 2', 'In-shell Grade'],
+    'cashew':          ['WW180', 'WW240', 'WW320', 'LP / Pieces'],
+    'chia':            ['Purity 99.9%', 'Purity 99.5%', 'Conventional'],
+    'quinoa':          ['White Quinoa Grade 1', 'Red Quinoa Grade 1', 'Mixed Grade'],
+    'lentils':         ['Premium Grade', 'Standard Grade']
   };
+
+  var additionalProducts = [
+    { group: 'Coffee', value: 'coffee-gc', label: 'Green Coffee (Generic)' },
+    { group: 'Fresh Fruits', value: 'orange', label: 'Oranges' },
+    { group: 'Fresh Fruits', value: 'lemon', label: 'Lemons / Limes' },
+    { group: 'Fresh Fruits', value: 'watermelon', label: 'Watermelon' },
+    { group: 'Grains, Seeds & Legumes', value: 'wheat', label: 'Wheat' },
+    { group: 'Grains, Seeds & Legumes', value: 'barley', label: 'Barley' },
+    { group: 'Grains, Seeds & Legumes', value: 'lentils', label: 'Lentils' },
+    { group: 'Grains, Seeds & Legumes', value: 'chia', label: 'Chia Seeds' },
+    { group: 'Spices & Botanicals', value: 'black-pepper', label: 'Black Pepper' },
+    { group: 'Spices & Botanicals', value: 'cinnamon', label: 'Cinnamon' },
+    { group: 'Oils & Other', value: 'cocoa', label: 'Cocoa Beans' },
+    { group: 'Oils & Other', value: 'tea', label: 'Tea (Black / Green)' },
+    { group: 'Oils & Other', value: 'macadamia', label: 'Macadamia Nuts' },
+    { group: 'Oils & Other', value: 'cashew', label: 'Cashew Nuts' }
+  ];
+
+  function ensureExtraProductOptions(selectEl) {
+    if (!selectEl) return;
+    if (!selectEl.hasAttribute('multiple')) {
+      selectEl.setAttribute('multiple', 'multiple');
+      selectEl.setAttribute('size', '8');
+      selectEl.setAttribute('data-enhanced', 'true');
+    }
+
+    if (selectEl.options.length) {
+      selectEl.options[0].disabled = true;
+      selectEl.options[0].selected = false;
+      selectEl.selectedIndex = -1;
+    }
+
+    additionalProducts.forEach(function(item) {
+      if (selectEl.querySelector('option[value="' + item.value + '"]')) return;
+      var group = null;
+      var groups = selectEl.querySelectorAll('optgroup');
+      groups.forEach(function(g) {
+        if (g.getAttribute('label') === item.group) group = g;
+      });
+      var opt = document.createElement('option');
+      opt.value = item.value;
+      opt.textContent = item.label;
+      if (group) {
+        group.appendChild(opt);
+      } else {
+        selectEl.appendChild(opt);
+      }
+    });
+
+    if (!selectEl.nextElementSibling || !selectEl.nextElementSibling.classList || !selectEl.nextElementSibling.classList.contains('multi-select-hint')) {
+      var hint = document.createElement('small');
+      hint.className = 'multi-select-hint';
+      hint.textContent = 'Select one or more products. Use Ctrl (Windows) to select multiple items.';
+      selectEl.insertAdjacentElement('afterend', hint);
+    }
+  }
 
   var productFormEl = document.getElementById('contactForm');
   if (productFormEl) {
+    productFormEl.querySelectorAll('.product-select').forEach(function(sel) {
+      ensureExtraProductOptions(sel);
+    });
+
     productFormEl.addEventListener('change', function(e) {
       if (!e.target.classList.contains('product-select')) return;
       var sel = e.target;
@@ -314,7 +622,9 @@
       var gradeWrap = document.getElementById(pfx + '-grade-wrap');
       var gradeSelect = document.getElementById(pfx + '-grade');
       if (!gradeWrap || !gradeSelect) return;
-      var grades = productGradeMap[sel.value];
+      var selected = sel.selectedOptions ? Array.from(sel.selectedOptions).map(function(o) { return o.value; }) : [];
+      var primary = selected.length ? selected[0] : '';
+      var grades = productGradeMap[primary];
       if (grades && grades.length) {
         gradeSelect.innerHTML = '<option value="">Select grade...</option>' +
           grades.map(function(g) { return '<option value="' + g + '">' + g + '</option>'; }).join('');
@@ -339,6 +649,7 @@
   var contactForm = document.getElementById('contactForm');
   if (contactForm) {
     var submitBtn = document.getElementById('submitBtn');
+    var contactFormWrapper = document.querySelector('.contact-form-wrapper');
     
     // Enable submit button by default
     if (submitBtn) {
@@ -358,22 +669,30 @@
         }
       }
 
-      // Show success state
       if (submitBtn) {
-        var originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Message Sent! ✓';
-        submitBtn.style.background = 'var(--green-700)';
         submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+      }
 
-        setTimeout(function () {
-          submitBtn.textContent = originalText;
-          submitBtn.style.background = '';
-          submitBtn.disabled = false;
-          contactForm.reset();
-          if (typeof grecaptcha !== 'undefined') {
-            grecaptcha.reset();
-          }
-        }, 3000);
+      if (typeof grecaptcha !== 'undefined') {
+        grecaptcha.reset();
+      }
+
+      // Replace form with thank-you panel
+      if (contactFormWrapper) {
+        contactForm.remove();
+        var thanksPanel = document.createElement('div');
+        thanksPanel.className = 'contact-thank-you';
+        thanksPanel.innerHTML =
+          '<span class="section-label">Thank You</span>' +
+          '<h3 style="margin:0.35rem 0 0.7rem;">Your enquiry has been sent</h3>' +
+          '<p style="margin:0 0 1rem;">A member of the Axis International team will contact you within one business day.</p>' +
+          '<p style="margin:0 0 1.4rem;">If your request is urgent, call us directly on +44 (0) 000 000 0000.</p>' +
+          '<div class="btn-group" style="gap:0.75rem;">' +
+            '<a href="/" class="btn btn-primary">Back to Home</a>' +
+            '<a href="/products/coffee" class="btn btn-outline">Explore Products</a>' +
+          '</div>';
+        contactFormWrapper.appendChild(thanksPanel);
       }
     });
   }
