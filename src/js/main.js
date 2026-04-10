@@ -260,7 +260,7 @@
     });
   }
 
-  /* --- Country selection: cascading state -> region -> city -> town --- */
+  /* --- Country selection: cascading state -> region -> city -> town (real dataset) --- */
   var countrySelect = document.getElementById('country');
   var regionRow = document.getElementById('regionRow');
   var stateSelect = document.getElementById('stateSelect');
@@ -268,245 +268,138 @@
   var citySelect = document.getElementById('citySelect');
   var townSelect = document.getElementById('townSelect');
 
-  var locationMap = {
-    'united-kingdom': {
-      'England': {
-        'Greater London': {
-          'London': ['Camden', 'Westminster', 'Croydon', 'Hackney']
-        },
-        'West Midlands': {
-          'Birmingham': ['Edgbaston', 'Selly Oak', 'Erdington', 'Aston']
-        },
-        'Greater Manchester': {
-          'Manchester': ['Salford', 'Stockport', 'Oldham', 'Bolton']
-        }
-      },
-      'Scotland': {
-        'Central Belt': {
-          'Glasgow': ['Paisley', 'East Kilbride', 'Cumbernauld', 'Motherwell']
-        },
-        'Lothian': {
-          'Edinburgh': ['Leith', 'Musselburgh', 'Dalkeith', 'Penicuik']
-        }
-      },
-      'Wales': {
-        'South Wales': {
-          'Cardiff': ['Barry', 'Penarth', 'Caerphilly', 'Pontypridd']
-        }
-      },
-      'Northern Ireland': {
-        'County Antrim': {
-          'Belfast': ['Lisburn', 'Newtownabbey', 'Bangor', 'Carrickfergus']
-        }
-      }
-    },
-    'uganda': {
-      'Central Region': {
-        'Kampala Area': {
-          'Kampala': ['Nansana', 'Kira', 'Makindye', 'Nakawa']
-        },
-        'Mukono-Buikwe Belt': {
-          'Mukono': ['Seeta', 'Njeru', 'Lugazi', 'Buikwe']
-        }
-      },
-      'Western Region': {
-        'Ankole': {
-          'Mbarara': ['Bushenyi', 'Ntungamo', 'Isingiro', 'Ibanda']
-        },
-        'Kigezi': {
-          'Kabale': ['Kisoro', 'Rukungiri', 'Kanungu', 'Rubanda']
-        }
-      },
-      'Eastern Region': {
-        'Busoga': {
-          'Jinja': ['Iganga', 'Bugiri', 'Mayuge', 'Kamuli']
-        },
-        'Elgon': {
-          'Mbale': ['Bududa', 'Sironko', 'Manafwa', 'Kapchorwa']
-        }
-      },
-      'Northern Region': {
-        'Acholi': {
-          'Gulu': ['Kitgum', 'Pader', 'Amuru', 'Nwoya']
-        },
-        'Lango': {
-          'Lira': ['Dokolo', 'Apac', 'Otuke', 'Kole']
-        }
-      }
-    },
-    'kenya': {
-      'Nairobi County': {
-        'Nairobi Metro': {
-          'Nairobi': ['Westlands', 'Kasarani', 'Embakasi', 'Kibra']
-        }
-      },
-      'Rift Valley': {
-        'North Rift': {
-          'Eldoret': ['Iten', 'Kitale', 'Kapsabet', 'Turbo']
-        },
-        'South Rift': {
-          'Nakuru': ['Naivasha', 'Molo', 'Njoro', 'Gilgil']
-        }
-      },
-      'Central Kenya': {
-        'Mount Kenya Region': {
-          'Nyeri': ['Karatina', 'Nanyuki', 'Kiganjo', 'Othaya']
-        }
-      },
-      'Coast Region': {
-        'Coastal Belt': {
-          'Mombasa': ['Kilifi', 'Malindi', 'Kwale', 'Likoni']
-        }
-      }
-    },
-    'tanzania': {
-      'Dar es Salaam': {
-        'Ilala-Kinondoni-Temeke': {
-          'Dar es Salaam': ['Kigamboni', 'Ubungo', 'Mbezi', 'Kawe']
-        }
-      },
-      'Arusha Region': {
-        'Northern Highlands': {
-          'Arusha': ['Meru', 'Karatu', 'Monduli', 'Usa River']
-        }
-      },
-      'Mwanza Region': {
-        'Lake Zone': {
-          'Mwanza': ['Ilemela', 'Sengerema', 'Geita', 'Misungwi']
-        }
-      }
-    },
-    'ethiopia': {
-      'Addis Ababa': {
-        'City Administration': {
-          'Addis Ababa': ['Bole', 'Yeka', 'Kirkos', 'Arada']
-        }
-      },
-      'Oromia': {
-        'Central Oromia': {
-          'Adama': ['Bishoftu', 'Mojo', 'Asella', 'Sebeta']
-        },
-        'Western Oromia': {
-          'Nekemte': ['Ambo', 'Gimbi', 'Shambu', 'Dembi Dolo']
-        }
-      },
-      'Amhara': {
-        'Northwest Amhara': {
-          'Bahir Dar': ['Gondar', 'Debre Tabor', 'Debre Markos', 'Woldiya']
-        }
-      }
-    },
-    'rwanda': {
-      'Kigali City': {
-        'Kigali Province': {
-          'Kigali': ['Gasabo', 'Kicukiro', 'Nyarugenge', 'Gisozi']
-        }
-      },
-      'Northern Province': {
-        'Musanze Belt': {
-          'Musanze': ['Rulindo', 'Burera', 'Gakenke', 'Kinigi']
-        }
-      },
-      'Eastern Province': {
-        'Kayonza Belt': {
-          'Rwamagana': ['Kayonza', 'Nyagatare', 'Kirehe', 'Kibungo']
-        }
-      }
-    },
-    'burundi': {
-      'Bujumbura Mairie': {
-        'Bujumbura Urban': {
-          'Bujumbura': ['Ngagara', 'Kinama', 'Nyakabiga', 'Kanyosha']
-        }
-      },
-      'Gitega Province': {
-        'Central Burundi': {
-          'Gitega': ['Karuzi', 'Ngozi', 'Muramvya', 'Mwaro']
-        }
-      }
-    }
-  };
-
-  function fillSelect(el, values, placeholder) {
+  function fillSelect(el, values, placeholder, valueKey, labelKey) {
     if (!el) return;
     el.innerHTML = '';
     var first = document.createElement('option');
     first.value = '';
     first.textContent = placeholder;
     el.appendChild(first);
+
     values.forEach(function(v) {
       var opt = document.createElement('option');
-      opt.value = v.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-      opt.textContent = v;
+      if (typeof v === 'string') {
+        opt.value = v.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        opt.textContent = v;
+      } else {
+        opt.value = v[valueKey] || (v[labelKey] || '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+        opt.textContent = v[labelKey];
+      }
       el.appendChild(opt);
     });
   }
 
   if (countrySelect && regionRow && stateSelect && regionSelect && citySelect && townSelect) {
-    function resetLocality() {
-      fillSelect(stateSelect, [], 'Select state or county...');
-      fillSelect(regionSelect, [], 'Select region or district...');
-      fillSelect(citySelect, [], 'Select city...');
-      fillSelect(townSelect, [], 'Select town...');
-    }
+    import('country-state-city').then(function(geo) {
+      var Country = geo.Country;
+      var State = geo.State;
+      var City = geo.City;
 
-    countrySelect.addEventListener('change', function() {
-      var country = this.value;
-      regionRow.style.display = country ? 'block' : 'none';
-      if (!country) {
-        resetLocality();
-        return;
+      var allCountries = Country.getAllCountries();
+
+      function populateCountrySelect() {
+        var priority = ['GB', 'UG', 'KE', 'TZ', 'ET', 'RW', 'BI'];
+        var byIso = {};
+        allCountries.forEach(function(c) { byIso[c.isoCode] = c; });
+
+        countrySelect.innerHTML = '';
+        var first = document.createElement('option');
+        first.value = '';
+        first.textContent = 'Where are you based?';
+        first.disabled = true;
+        first.selected = true;
+        countrySelect.appendChild(first);
+
+        var priorityGroup = document.createElement('optgroup');
+        priorityGroup.label = 'Priority Markets';
+        priority.forEach(function(iso) {
+          if (!byIso[iso]) return;
+          var opt = document.createElement('option');
+          opt.value = byIso[iso].isoCode;
+          opt.textContent = byIso[iso].name;
+          priorityGroup.appendChild(opt);
+        });
+        countrySelect.appendChild(priorityGroup);
+
+        var allGroup = document.createElement('optgroup');
+        allGroup.label = 'All Countries';
+        allCountries
+          .slice()
+          .sort(function(a, b) { return a.name.localeCompare(b.name); })
+          .forEach(function(c) {
+            if (priority.indexOf(c.isoCode) !== -1) return;
+            var opt = document.createElement('option');
+            opt.value = c.isoCode;
+            opt.textContent = c.name;
+            allGroup.appendChild(opt);
+          });
+        countrySelect.appendChild(allGroup);
       }
 
-      var states = locationMap[country]
-        ? Object.keys(locationMap[country])
-        : ['State / Province A', 'State / Province B', 'State / Province C', 'Other'];
-      fillSelect(stateSelect, states, 'Select state or county...');
-      fillSelect(regionSelect, [], 'Select region or district...');
-      fillSelect(citySelect, [], 'Select city...');
-      fillSelect(townSelect, [], 'Select town...');
-    });
+      populateCountrySelect();
 
-    stateSelect.addEventListener('change', function() {
-      var country = countrySelect.value;
-      var stateName = this.options[this.selectedIndex] ? this.options[this.selectedIndex].text : '';
-      var regions = [];
-      if (locationMap[country] && locationMap[country][stateName]) {
-        regions = Object.keys(locationMap[country][stateName]);
-      } else if (country) {
-        regions = ['Region / District 1', 'Region / District 2', 'Region / District 3', 'Other'];
-      }
-      fillSelect(regionSelect, regions, 'Select region or district...');
-      fillSelect(citySelect, [], 'Select city...');
-      fillSelect(townSelect, [], 'Select town...');
-    });
+      var selectedCountryIso = '';
+      var selectedStateIso = '';
+      var cachedStateCities = [];
 
-    regionSelect.addEventListener('change', function() {
-      var country = countrySelect.value;
-      var stateName = stateSelect.options[stateSelect.selectedIndex] ? stateSelect.options[stateSelect.selectedIndex].text : '';
-      var regionName = this.options[this.selectedIndex] ? this.options[this.selectedIndex].text : '';
-      var cities = [];
-      if (locationMap[country] && locationMap[country][stateName] && locationMap[country][stateName][regionName]) {
-        cities = Object.keys(locationMap[country][stateName][regionName]);
-      } else if (country) {
-        cities = ['City 1', 'City 2', 'City 3', 'Other'];
+      function resetLocality() {
+        fillSelect(stateSelect, [], 'Select state or county...');
+        fillSelect(regionSelect, [], 'Select region or district...');
+        fillSelect(citySelect, [], 'Select city...');
+        fillSelect(townSelect, [], 'Select town...');
+        selectedStateIso = '';
+        cachedStateCities = [];
       }
-      fillSelect(citySelect, cities, 'Select city...');
-      fillSelect(townSelect, [], 'Select town...');
-    });
 
-    citySelect.addEventListener('change', function() {
-      var country = countrySelect.value;
-      var stateName = stateSelect.options[stateSelect.selectedIndex] ? stateSelect.options[stateSelect.selectedIndex].text : '';
-      var regionName = regionSelect.options[regionSelect.selectedIndex] ? regionSelect.options[regionSelect.selectedIndex].text : '';
-      var cityName = this.options[this.selectedIndex] ? this.options[this.selectedIndex].text : '';
-      var towns = [];
-      if (locationMap[country] && locationMap[country][stateName] && locationMap[country][stateName][regionName] && locationMap[country][stateName][regionName][cityName]) {
-        towns = locationMap[country][stateName][regionName][cityName];
-      } else if (country) {
-        towns = ['Town 1', 'Town 2', 'Town 3', 'Other'];
-      }
-      fillSelect(townSelect, towns, 'Select town...');
+      countrySelect.addEventListener('change', function() {
+        selectedCountryIso = this.value || '';
+        regionRow.style.display = selectedCountryIso ? 'block' : 'none';
+
+        if (!selectedCountryIso) {
+          resetLocality();
+          return;
+        }
+
+        var states = State.getStatesOfCountry(selectedCountryIso) || [];
+        fillSelect(stateSelect, states, 'Select state or county...', 'isoCode', 'name');
+        fillSelect(regionSelect, [], 'Select region or district...');
+        fillSelect(citySelect, [], 'Select city...');
+        fillSelect(townSelect, [], 'Select town...');
+      });
+
+      stateSelect.addEventListener('change', function() {
+        selectedStateIso = this.value || '';
+        fillSelect(regionSelect, [], 'Select region or district...');
+        fillSelect(citySelect, [], 'Select city...');
+        fillSelect(townSelect, [], 'Select town...');
+
+        if (!selectedCountryIso || !selectedStateIso) return;
+
+        cachedStateCities = City.getCitiesOfState(selectedCountryIso, selectedStateIso) || [];
+        var stateLabel = stateSelect.options[stateSelect.selectedIndex] ? stateSelect.options[stateSelect.selectedIndex].textContent.trim() : '';
+        var regionNames = stateLabel ? [stateLabel] : [];
+
+        fillSelect(regionSelect, regionNames, 'Select region or district...');
+        fillSelect(citySelect, cachedStateCities.map(function(c) { return c.name; }), 'Select city...');
+      });
+
+      regionSelect.addEventListener('change', function() {
+        fillSelect(citySelect, cachedStateCities.map(function(c) { return c.name; }), 'Select city...');
+        fillSelect(townSelect, [], 'Select town...');
+      });
+
+      citySelect.addEventListener('change', function() {
+        var selectedCity = this.options[this.selectedIndex] ? this.options[this.selectedIndex].textContent.trim() : '';
+        var localityPool = cachedStateCities.filter(function(c) {
+          return c.name !== selectedCity;
+        }).map(function(c) { return c.name; });
+
+        var uniqueLocalities = Array.from(new Set(localityPool)).sort(function(a, b) {
+          return a.localeCompare(b);
+        }).slice(0, 500);
+
+        fillSelect(townSelect, uniqueLocalities, 'Select town...');
+      });
     });
   }
 
@@ -684,10 +577,9 @@
         var thanksPanel = document.createElement('div');
         thanksPanel.className = 'contact-thank-you';
         thanksPanel.innerHTML =
-          '<span class="section-label">Thank You</span>' +
-          '<h3 style="margin:0.35rem 0 0.7rem;">Your enquiry has been sent</h3>' +
-          '<p style="margin:0 0 1rem;">A member of the Axis International team will contact you within one business day.</p>' +
-          '<p style="margin:0 0 1.4rem;">If your request is urgent, call us directly on +44 (0) 000 000 0000.</p>' +
+          '<p style="margin:0 0 0.75rem;font-weight:700;color:var(--green-800);">Thank you. We have received your enquiry.</p>' +
+          '<p style="margin:0 0 0.75rem;">Our team will review your details and get back to you within one business day.</p>' +
+          '<p style="margin:0 0 1.2rem;">If it is urgent, please call +44 (0) 000 000 0000.</p>' +
           '<div class="btn-group" style="gap:0.75rem;">' +
             '<a href="/" class="btn btn-primary">Back to Home</a>' +
             '<a href="/products/coffee" class="btn btn-outline">Explore Products</a>' +
