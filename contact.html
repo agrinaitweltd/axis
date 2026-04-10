@@ -310,14 +310,34 @@
                   </select>
                 </div>
               </div>
-              <div class="form-row" id="regionRow" style="display:none;">
-                <div class="form-group">
-                  <label for="region">Region / State / Province</label>
-                  <input type="text" id="region" name="region" placeholder="e.g. Central Region, Yorkshire, Île-de-France..." />
+              <div id="regionRow" style="display:none;">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="stateSelect">State / County *</label>
+                    <select id="stateSelect" name="state">
+                      <option value="">Select state or county...</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="regionSelect">Region / District *</label>
+                    <select id="regionSelect" name="region">
+                      <option value="">Select region or district...</option>
+                    </select>
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label for="city">City / Town</label>
-                  <input type="text" id="city" name="city" placeholder="Your nearest city or town" />
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="citySelect">City *</label>
+                    <select id="citySelect" name="city">
+                      <option value="">Select city...</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="townSelect">Town *</label>
+                    <select id="townSelect" name="town">
+                      <option value="">Select town...</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
