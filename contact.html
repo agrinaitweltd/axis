@@ -131,23 +131,83 @@
                 <input type="tel" id="phone" name="phone" placeholder="+44 7000 000000" />
               </div>
 
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="businessType">Type of Business *</label>
+                  <select id="businessType" name="businessType" required>
+                    <option value="" disabled selected>Select business type...</option>
+                    <option value="wholesale">Wholesale / Distributor</option>
+                    <option value="export">Export (Non-UK)</option>
+                    <option value="import">Import (Direct Buyer)</option>
+                    <option value="producer">Producer / Farmer</option>
+                    <option value="retail">Retail / Food Service</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="destination">Destination Region *</label>
+                  <select id="destination" name="destination" required>
+                    <option value="" disabled selected>Where do you operate?</option>
+                    <option value="uk">United Kingdom</option>
+                    <option value="europe">Europe</option>
+                    <option value="africa">Africa</option>
+                    <option value="asia">Asia</option>
+                    <option value="americas">Americas</option>
+                    <option value="middle-east">Middle East</option>
+                    <option value="global">Multiple / Global</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+              </div>
+
               <div class="form-group">
-                <label for="interest">Area of Interest</label>
-                <select id="interest" name="interest">
-                  <option value="" disabled selected>Select a product or service...</option>
-                  <option value="coffee">Coffee</option>
-                  <option value="fruits">Fresh Fruits</option>
-                  <option value="grains">Grains</option>
-                  <option value="other-produce">Other Produce</option>
-                  <option value="export">Export Services</option>
-                  <option value="import">Import / UK Wholesale</option>
-                  <option value="general">General Enquiry</option>
+                <label for="interest">Product of Interest *</label>
+                <select id="interest" name="interest" required>
+                  <option value="" disabled selected>Select a product...</option>
+                  <optgroup label="Coffee">
+                    <option value="coffee-arabica">Arabica Coffee</option>
+                    <option value="coffee-robusta">Robusta Coffee</option>
+                    <option value="coffee-specialty">Specialty / Premium Coffee</option>
+                    <option value="coffee-bulk">Coffee (Bulk/General)</option>
+                  </optgroup>
+                  <optgroup label="Fresh Fruits">
+                    <option value="fruits-avocado">Avocados</option>
+                    <option value="fruits-mango">Mangoes</option>
+                    <option value="fruits-pineapple">Pineapples</option>
+                    <option value="fruits-banana">Bananas</option>
+                    <option value="fruits-citrus">Citrus</option>
+                    <option value="fruits-mixed">Mixed Fruits</option>
+                  </optgroup>
+                  <optgroup label="Grains & Seeds">
+                    <option value="grains-maize">Maize / Corn</option>
+                    <option value="grains-sorghum">Sorghum</option>
+                    <option value="grains-millet">Millet</option>
+                    <option value="grains-wheat">Wheat</option>
+                    <option value="grains-mixed">Mixed Grains</option>
+                  </optgroup>
+                  <optgroup label="Other Produce">
+                    <option value="produce-nuts">Nuts & Legumes</option>
+                    <option value="produce-spices">Spices & Herbs</option>
+                    <option value="produce-dried">Dried Produce</option>
+                    <option value="produce-other">Other Produce</option>
+                  </optgroup>
+                  <optgroup label="Services">
+                    <option value="export-services">Export Services</option>
+                    <option value="import-services">Import / UK Wholesale Services</option>
+                    <option value="logistics">Logistics & Supply Chain</option>
+                    <option value="enquiry">General Enquiry</option>
+                  </optgroup>
                 </select>
               </div>
 
               <div class="form-group">
-                <label for="message">Message *</label>
-                <textarea id="message" name="message" rows="5" placeholder="Please describe what you are looking for, quantities required, and any other relevant details..." required></textarea>
+                <label for="quantity">Estimated Quantity Required</label>
+                <input type="text" id="quantity" name="quantity" placeholder="e.g. 5 tonnes, 1 container (40ft), 100kg, etc." />
+              </div>
+
+              <div class="form-group">
+                <label for="message">Additional Details *</label>
+                <textarea id="message" name="message" rows="4" placeholder="Please describe your specific requirements, timeline, quality specifications, and any other relevant details..." required></textarea>
               </div>
 
               <button type="submit" class="form-submit">Send Message</button>
