@@ -1481,7 +1481,7 @@ footer {
    PAGE BANNER (inner pages)
    ============================================================ */
 .page-banner {
-  padding: 110px 0 60px;
+  padding: 110px 0 100px;
   background: var(--green-800);
   position: relative;
   overflow: hidden;
