@@ -1397,6 +1397,96 @@ p  { color: var(--text-500); font-size: 0.95rem; }
 .cta-banner p { color: rgba(255,255,255,0.7); margin-bottom: 2rem; font-size: 1rem; }
 
 /* ============================================================
+   PRE-FOOTER LANDSCAPE BAND
+   ============================================================ */
+.pre-footer-band {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.pre-footer-band-img {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 55%;
+  filter: brightness(0.6) saturate(0.85);
+}
+
+.pre-footer-band-wave {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  line-height: 0;
+}
+
+.pre-footer-band-wave svg {
+  display: block;
+  width: 100%;
+  height: 80px;
+}
+
+/* ============================================================
+   SOURCING PARTNERS
+   ============================================================ */
+.sourcing-partners-section {
+  background: var(--white);
+  padding: 70px 0;
+}
+
+.sourcing-partners-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.sourcing-partner-card {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.75rem 2rem;
+  border: 1px solid var(--green-100);
+  border-radius: var(--radius-lg);
+  background: var(--white);
+  transition: box-shadow 0.25s, border-color 0.25s, transform 0.25s;
+  text-decoration: none;
+}
+
+.sourcing-partner-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+  border-color: var(--green-300);
+  transform: translateY(-2px);
+}
+
+.sourcing-partner-logo {
+  width: 80px;
+  height: 60px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: grayscale(0.2);
+}
+
+.sourcing-partner-info h4 {
+  font-size: 0.95rem;
+  color: var(--green-900);
+  margin-bottom: 0.25rem;
+}
+
+.sourcing-partner-info span {
+  font-size: 0.78rem;
+  color: var(--green-500);
+  font-family: var(--font-body);
+}
+
+@media (max-width: 640px) {
+  .sourcing-partners-grid { grid-template-columns: 1fr; }
+  .pre-footer-band { height: 160px; }
+}
+
+/* ============================================================
    FOOTER
    ============================================================ */
 footer {
