@@ -1184,77 +1184,147 @@ p  { color: var(--text-500); font-size: 0.95rem; }
 /* ============================================================
    SOURCING
    ============================================================ */
+.sourcing-section { overflow: hidden; }
+
 .sourcing-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  gap: 5rem;
   align-items: center;
 }
 
-.sourcing-text .section-sub { margin-bottom: 1.5rem; }
+.sourcing-text .section-sub { margin-bottom: 0; }
 
-.sourcing-features {
+/* Numbered pillars */
+.sourcing-pillars {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
-  margin-top: 1.5rem;
+  gap: 0;
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
 }
 
-.sourcing-feature {
+.sourcing-pillar {
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
   align-items: flex-start;
+  padding: 1.4rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  transition: background 0.2s;
 }
 
-.sourcing-feature-icon {
-  width: 44px;
-  height: 44px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.sourcing-pillar-num {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--green-400);
+  font-family: var(--font-body);
+  padding-top: 3px;
   flex-shrink: 0;
-  color: var(--green-300);
-  transition: all 0.3s ease;
+  width: 26px;
 }
 
-.sourcing-feature:hover .sourcing-feature-icon {
-  background: rgba(255,255,255,0.12);
-  border-color: var(--green-400);
-  color: var(--green-200);
-  transform: translateY(-1px);
-}
-
-.sourcing-feature-icon svg { width: 20px; height: 20px; }
-
-.sourcing-feature h4 {
-  font-size: 0.9rem;
-  margin-bottom: 0.15rem;
+.sourcing-pillar h4 {
+  font-size: 0.88rem;
+  margin-bottom: 0.25rem;
   color: var(--white);
 }
 
-.sourcing-feature p {
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.55);
+.sourcing-pillar p {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.5);
   margin: 0;
+  line-height: 1.6;
 }
 
+/* Visual / map side */
 .sourcing-visual { position: relative; }
 
 .sourcing-map-card {
+  position: relative;
   background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: var(--radius-lg);
   overflow: hidden;
   aspect-ratio: 4/5;
 }
 
-.sourcing-map-card img {
+.sourcing-map-card > img {
   width: 100%; height: 100%;
   object-fit: cover;
-  opacity: 0.7;
+  opacity: 0.55;
+  display: block;
+}
+
+.sourcing-map-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(10,32,20,0.3) 0%, rgba(10,32,20,0.6) 100%);
+  pointer-events: none;
+}
+
+/* Floating origin cards */
+.sourcing-origin-card {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: rgba(10,28,18,0.82);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 0.55rem 0.85rem;
+  animation: float-card 4s ease-in-out infinite;
+}
+
+.sourcing-origin-card:nth-child(3) { animation-delay: 0s; }
+.sourcing-origin-card:nth-child(4) { animation-delay: 1.3s; }
+.sourcing-origin-card:nth-child(5) { animation-delay: 2.6s; }
+
+@keyframes float-card {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+.origin-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green-400);
+  box-shadow: 0 0 0 3px rgba(74,186,120,0.25);
+  flex-shrink: 0;
+}
+
+.sourcing-origin-card strong {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.sourcing-origin-card span {
+  font-size: 0.68rem;
+  color: rgba(255,255,255,0.5);
+  display: block;
+}
+
+/* Team badge */
+.sourcing-team-badge {
+  position: absolute;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--green-600);
+  border-radius: 8px;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: 0.02em;
 }
 
 /* ============================================================
