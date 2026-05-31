@@ -1,12 +1,15 @@
 {
-  "name": "axis-international",
+  "name": "axis-agro",
   "version": "1.0.0",
-  "description": "Axis International Limited — Agricultural Trade Website",
+  "description": "Axis Agro International Limited — Agricultural Trade Website",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
     "sync:locations": "node scripts/sync-location-db.mjs"
+  },
+  "dependencies": {
+    "resend": "^3.0.0"
   },
   "devDependencies": {
     "vite": "^5.2.0"

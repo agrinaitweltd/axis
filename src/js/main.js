@@ -1,6 +1,9 @@
 ﻿/* ============================================================
-   Axis International Limited  Main JavaScript
+   Axis Agro International Limited - Main JavaScript
    ============================================================ */
+
+// Import form handler for reCAPTCHA and email notifications
+import AxisAgroFormHandler from './form-handler.js';
 
 (function () {
   'use strict';
@@ -534,55 +537,20 @@
     }
   };
 
-  /* --- Form submission handler --- */
+  /* --- Form submission handler (updated for reCAPTCHA v3 & Resend) --- */
   var contactForm = document.getElementById('contactForm');
   if (contactForm) {
     var submitBtn = document.getElementById('submitBtn');
-    var contactFormWrapper = document.querySelector('.contact-form-wrapper');
     
     // Enable submit button by default
     if (submitBtn) {
       submitBtn.disabled = false;
       submitBtn.style.opacity = '1';
+      submitBtn.setAttribute('data-original-text', submitBtn.textContent);
     }
     
-    contactForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      
-      // Check if reCAPTCHA is verified (only if reCAPTCHA is loaded)
-      if (typeof grecaptcha !== 'undefined') {
-        var recaptchaResponse = grecaptcha.getResponse();
-        if (!recaptchaResponse) {
-          alert('Please complete the reCAPTCHA verification.');
-          return;
-        }
-      }
-
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Sending...';
-      }
-
-      if (typeof grecaptcha !== 'undefined') {
-        grecaptcha.reset();
-      }
-
-      // Replace form with thank-you panel
-      if (contactFormWrapper) {
-        contactForm.remove();
-        var thanksPanel = document.createElement('div');
-        thanksPanel.className = 'contact-thank-you';
-        thanksPanel.innerHTML =
-          '<p style="margin:0 0 0.75rem;font-weight:700;color:var(--green-800);">Thank you. We have received your enquiry.</p>' +
-          '<p style="margin:0 0 0.75rem;">Our team will review your details and get back to you within one business day.</p>' +
-          '<p style="margin:0 0 1.2rem;">If it is urgent, please call +44 (0) 000 000 0000.</p>' +
-          '<div class="btn-group" style="gap:0.75rem;">' +
-            '<a href="/" class="btn btn-primary">Back to Home</a>' +
-            '<a href="/products/coffee" class="btn btn-outline">Explore Products</a>' +
-          '</div>';
-        contactFormWrapper.appendChild(thanksPanel);
-      }
-    });
+    // Add reCAPTCHA marker attribute
+    contactForm.setAttribute('data-recaptcha', 'true');
   }
 
 })();
