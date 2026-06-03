@@ -96,8 +96,8 @@ class AxisAgroFormHandler {
         }
       }
 
-      // Show success UI and remove the form
-      this.showSuccess(form, result.message);
+      // Show success UI and remove the form, passing adminResults for visibility
+      this.showSuccess(form, result.message, result.adminResults);
 
       // Clear any error messages
       this.clearError(form);
@@ -169,17 +169,30 @@ class AxisAgroFormHandler {
     }
   }
 
-  showSuccess(form, message) {
+  showSuccess(form, message, adminResults) {
     // Remove the form completely and show a compact success banner where it was
     const banner = document.createElement('div');
     banner.className = 'form-success-banner';
     banner.setAttribute('role', 'status');
+
+    // Build admin results debug block if provided
+    let adminDebugBlock = '';
+    if (adminResults && Array.isArray(adminResults)) {
+      const adminSummary = adminResults.map(r => {
+        const status = r.success ? '✓' : '✗';
+        const errorText = r.error ? ` — ${r.error}` : '';
+        return `${status} ${r.to}${errorText}`;
+      }).join('<br>');
+      adminDebugBlock = `<div style="margin-top:12px;padding:8px;background:rgba(0,0,0,0.04);border-radius:4px;font-size:0.85rem;color:var(--text-600);font-family:monospace;">${adminSummary}</div>`;
+    }
+
     banner.innerHTML = `
       <div style="background:#eaf6ef;border:1px solid var(--green-200);padding:14px;border-radius:8px;display:flex;gap:12px;align-items:center;">
         <div style="width:44px;height:44px;border-radius:50%;background:var(--green-100);color:var(--green-700);display:flex;align-items:center;justify-content:center;font-weight:800;">✓</div>
-        <div>
+        <div style="flex:1;">
           <div style="font-weight:700;">Thanks — we've received your message</div>
           <div style="color:var(--text-500);font-size:0.95rem;margin-top:4px;">${message || 'A confirmation email has been sent. We will reply within one business day.'}</div>
+          ${adminDebugBlock}
         </div>
       </div>
     `;
