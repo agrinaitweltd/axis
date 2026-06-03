@@ -168,11 +168,24 @@ export default async function handler(req, res) {
   }
 
   try {
+    console.log('Received form submission request');
     const { formData, recaptchaToken } = req.body;
 
     // Validate required fields
     if (!formData || !recaptchaToken) {
+      console.error('Missing required fields:', { formData: !!formData, recaptchaToken: !!recaptchaToken });
       return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // Check environment variables
+    if (!process.env.RESEND_API_KEY) {
+      console.error('RESEND_API_KEY is not set');
+      return res.status(500).json({ error: 'Server configuration error' });
+    }
+
+    if (!process.env.SENDER_EMAIL) {
+      console.error('SENDER_EMAIL is not set');
+      return res.status(500).json({ error: 'Server configuration error' });
     }
 
     // Verify reCAPTCHA
@@ -190,6 +203,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid email address' });
     }
 
+    console.log('Sending confirmation email to:', email);
     // Send confirmation email to user
     const userEmailResult = await resend.emails.send({
       from: process.env.SENDER_EMAIL,
@@ -197,6 +211,8 @@ export default async function handler(req, res) {
       subject: 'We Received Your Enquiry - Axis Agro International Limited',
       html: getUserConfirmationEmail(formData),
     });
+
+    console.log('User email result:', userEmailResult);
 
     if (userEmailResult.error) {
       console.error('Error sending user confirmation email:', userEmailResult.error);
@@ -209,6 +225,8 @@ export default async function handler(req, res) {
       process.env.ADMIN_EMAIL_2,
     ].filter(Boolean);
 
+    console.log('Sending admin notifications to:', adminEmails);
+
     for (const adminEmail of adminEmails) {
       const adminEmailResult = await resend.emails.send({
         from: process.env.SENDER_EMAIL,
@@ -219,6 +237,8 @@ export default async function handler(req, res) {
 
       if (adminEmailResult.error) {
         console.error(`Error sending admin email to ${adminEmail}:`, adminEmailResult.error);
+      } else {
+        console.log(`Successfully sent admin email to ${adminEmail}`);
       }
     }
 
@@ -229,6 +249,6 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('Form submission error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error: ' + error.message });
   }
 }

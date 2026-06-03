@@ -21,6 +21,13 @@ export default defineConfig({
   server: {
     // Rewrite clean URLs to .html files in dev
     middlewareMode: false,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
   },
   plugins: [
     {
@@ -29,7 +36,7 @@ export default defineConfig({
         server.middlewares.use((req, res, next) => {
           const url = req.url.split('?')[0]
           // Skip files with extensions, root, and Vite internals
-          if (url === '/' || url.includes('.') || url.startsWith('/@') || url.startsWith('/src') || url.startsWith('/node_modules')) {
+          if (url === '/' || url.includes('.') || url.startsWith('/@') || url.startsWith('/src') || url.startsWith('/node_modules') || url.startsWith('/api')) {
             return next()
           }
           // Rewrite /about -> /about.html, /products/coffee -> /products/coffee.html

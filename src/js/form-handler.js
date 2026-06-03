@@ -187,7 +187,7 @@ class AxisAgroFormHandler {
   }
 
   ensureBadgeVisibility() {
-    // Add CSS to ensure reCAPTCHA badge is always visible and styled nicely
+    // Add CSS to show only reCAPTCHA logo, pop out full badge on hover
     const style = document.createElement('style');
     style.textContent = `
       .grecaptcha-badge {
@@ -196,17 +196,30 @@ class AxisAgroFormHandler {
         display: block !important;
         pointer-events: auto !important;
         z-index: 99999 !important;
-        right: 20px !important;
-        bottom: 20px !important;
+        right: 0 !important;
+        bottom: 0 !important;
         position: fixed !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-        border-radius: 4px !important;
-        transition: all 0.3s ease !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transform: translateX(100%) !important;
+        width: 70px !important;
+        overflow: hidden !important;
       }
       
       .grecaptcha-badge:hover {
-        box-shadow: 0 6px 20px rgba(0,0,0,0.2) !important;
-        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25) !important;
+        transform: translateX(0) !important;
+        width: auto !important;
+        border-radius: 4px !important;
+        right: 20px !important;
+        bottom: 20px !important;
+      }
+      
+      /* Hide the text content by default, show only logo */
+      .grecaptcha-badge:not(:hover) .grecaptcha-badge-text,
+      .grecaptcha-badge:not(:hover) .grecaptcha-badge-paragraph {
+        display: none !important;
       }
       
       /* Make the badge container blend better with the site design */
@@ -222,14 +235,17 @@ class AxisAgroFormHandler {
       /* Responsive positioning for mobile */
       @media (max-width: 768px) {
         .grecaptcha-badge {
-          right: 10px !important;
-          bottom: 10px !important;
-          transform: scale(0.9) !important;
-          transform-origin: bottom right !important;
+          right: 0 !important;
+          bottom: 0 !important;
+          transform: translateX(100%) !important;
+          width: 60px !important;
         }
         
         .grecaptcha-badge:hover {
-          transform: scale(1) translateY(-2px) !important;
+          transform: translateX(0) !important;
+          width: auto !important;
+          right: 10px !important;
+          bottom: 10px !important;
         }
       }
       
