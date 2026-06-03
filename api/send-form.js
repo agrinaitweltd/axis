@@ -206,26 +206,23 @@ export default async function handler(req, res) {
 
     console.log('Sending confirmation email to:', email);
     // Send confirmation email to user
+    const senderEmail = process.env.SENDER_EMAIL || process.env.VITE_SENDER_EMAIL || 'noreply@axisagro.co.uk';
     const userEmailResult = await resend.emails.send({
-      from: process.env.SENDER_EMAIL || process.env.VITE_SENDER_EMAIL,
+      from: senderEmail,
       to: email,
       subject: 'We Received Your Enquiry - Axis Agro International Limited',
       html: getUserConfirmationEmail(formData),
     });
 
-    console.log('User email result:', userEmailResult);
+    console.log('User email result:', JSON.stringify(userEmailResult, null, 2));
 
     if (userEmailResult.error) {
       console.error('Error sending user confirmation email:', userEmailResult.error);
       return res.status(500).json({ error: 'Failed to send confirmation email' });
     }
 
-    // Send admin notification emails (use sensible fallbacks so admins still get notified)
-    const envAdmin1 = process.env.ADMIN_EMAIL_1 || process.env.VITE_ADMIN_EMAIL_1;
-    const envAdmin2 = process.env.ADMIN_EMAIL_2 || process.env.VITE_ADMIN_EMAIL_2;
-    const fallbackAdmin = process.env.ADMIN_EMAIL || process.env.VITE_ADMIN_EMAIL || 'info@axisagro.co.uk';
-
-    const adminEmails = [envAdmin1, envAdmin2, fallbackAdmin].filter(Boolean);
+    // Send admin notification emails to hardcoded addresses
+    const adminEmails = ['info@axisagro.co.uk', 'oliver@axisagro.co.uk'];
 
     console.log('Sending admin notifications to:', adminEmails);
 
@@ -234,11 +231,13 @@ export default async function handler(req, res) {
     for (const adminEmail of adminEmails) {
       try {
         const adminEmailResult = await resend.emails.send({
-          from: process.env.SENDER_EMAIL || process.env.VITE_SENDER_EMAIL || fallbackAdmin,
+          from: senderEmail,
           to: adminEmail,
           subject: `New Form Submission from ${firstName} ${lastName}`,
           html: getAdminNotificationEmail(formData),
         });
+
+        console.log(`Admin email response for ${adminEmail}:`, JSON.stringify(adminEmailResult, null, 2));
 
         if (adminEmailResult && adminEmailResult.error) {
           console.error(`Error sending admin email to ${adminEmail}:`, adminEmailResult.error);
