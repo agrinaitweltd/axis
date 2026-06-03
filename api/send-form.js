@@ -236,9 +236,6 @@ function getAdminNotificationEmail(formData) {
 </html>
   `;
 }
-</html>
-  `;
-}
 
 export default async function handler(req, res) {
   // Only allow POST requests
@@ -285,7 +282,6 @@ export default async function handler(req, res) {
 
     console.log('Sending confirmation email to:', email);
     // Send confirmation email to user
-    const senderEmail = process.env.SENDER_EMAIL || process.env.VITE_SENDER_EMAIL || 'noreply@axisagro.co.uk';
     
     try {
       const userEmailResult = await resend.emails.send({
