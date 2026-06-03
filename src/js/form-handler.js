@@ -59,16 +59,16 @@ class AxisAgroFormHandler {
     }
 
     try {
-      // Show loading state
+      // Collect form data first (don't disable inputs before collecting)
+      const formData = this.collectFormData(form);
+
+      // Show loading state (this will disable controls)
       this.setFormLoading(form, true);
 
       // Get reCAPTCHA token
       const token = await window.grecaptcha.execute(this.siteKey, {
         action: 'submit',
       });
-
-      // Collect form data
-      const formData = this.collectFormData(form);
 
       // Submit form to API
       const response = await fetch('/api/send-form', {
