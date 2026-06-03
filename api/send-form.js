@@ -222,7 +222,7 @@ export default async function handler(req, res) {
     }
 
     // Send admin notification emails to hardcoded addresses
-    const adminEmails = ['info@axisagro.co.uk', 'oliver@axisagro.co.uk'];
+    const adminEmails = ['oliver.amanya1@gmail.com'];
 
     console.log('Sending admin notifications to:', adminEmails);
 
