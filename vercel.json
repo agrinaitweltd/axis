@@ -11,10 +11,5 @@
     { "source": "/products/grains",        "destination": "/products/grains.html" },
     { "source": "/products/other-produce", "destination": "/products/other-produce.html" },
     { "source": "/api/(.*)",       "destination": "/api/$1" }
-  ],
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs18.x"
-    }
-  }
+  ]
 }

@@ -43,6 +43,7 @@ For the contact form and reCAPTCHA to work on Vercel, you must set the following
 - Both versions are included in `.env` for local development
 - In production, only the runtime variables (non-VITE_) are critical for the API
 - The client-side variables (VITE_) must be set for the build to work properly
+- Vercel auto-detects Node.js serverless functions in the `api/` directory
 
 ## Resend Domain Verification
 
