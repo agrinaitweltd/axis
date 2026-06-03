@@ -47,7 +47,7 @@ function getUserConfirmationEmail(formData) {
     body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
     .container { max-width: 600px; margin: 0 auto; background: #ffffff; }
     .header { background: linear-gradient(135deg, #0b1f14 0%, #14352a 100%); padding: 40px 20px; text-align: center; }
-    .logo { max-height: 60px; margin-bottom: 15px; }
+    .logo { max-height: 80px; margin-bottom: 20px; }
     .header h1 { color: #ffffff; margin: 0; font-size: 24px; }
     .content { padding: 40px 20px; }
     .greeting { color: #0b1f14; font-size: 18px; font-weight: 600; margin-bottom: 20px; }
@@ -61,6 +61,7 @@ function getUserConfirmationEmail(formData) {
 <body>
   <div class="container">
     <div class="header">
+      <img src="https://axisagro.co.uk/public/logo.png" alt="Axis Agro International Limited" class="logo" />
       <h1>Thank You!</h1>
       <p style="color: rgba(255,255,255,0.8); margin: 10px 0 0 0;">Axis Agro International Limited</p>
     </div>
@@ -108,14 +109,36 @@ function getUserConfirmationEmail(formData) {
 
 // Email template for admin notification
 function getAdminNotificationEmail(formData) {
-  const formFields = Object.entries(formData)
-    .map(([key, value]) => {
-      const displayKey = key
-        .replace(/([A-Z])/g, ' $1')
-        .replace(/^./, str => str.toUpperCase());
-      return `<tr><td style="padding: 8px; border-bottom: 1px solid #e2e8e4;"><strong>${displayKey}:</strong></td><td style="padding: 8px; border-bottom: 1px solid #e2e8e4;">${value || 'N/A'}</td></tr>`;
-    })
-    .join('');
+  // Group form fields into sections for better readability
+  const contactFields = ['firstName', 'lastName', 'email', 'phone', 'company', 'country'];
+  const businessFields = ['businessType'];
+  const otherFields = Object.keys(formData).filter(
+    k => !contactFields.includes(k) && !businessFields.includes(k)
+  );
+
+  const renderSection = (title, fields) => {
+    const rows = fields
+      .filter(key => formData[key])
+      .map((key, idx) => {
+        const displayKey = key
+          .replace(/([A-Z])/g, ' $1')
+          .replace(/^./, str => str.toUpperCase());
+        const bgColor = idx % 2 === 0 ? '#ffffff' : '#f9fafb';
+        return `<tr style="background:${bgColor};">
+          <td style="padding: 12px 15px; border-bottom: 1px solid #e5e7eb; font-weight: 600; color: #0b1f14; width: 35%;">${displayKey}</td>
+          <td style="padding: 12px 15px; border-bottom: 1px solid #e5e7eb; color: #333;">${formData[key] || '—'}</td>
+        </tr>`;
+      });
+    
+    return rows.length > 0 ? `
+      <div style="margin-bottom: 24px;">
+        <h3 style="color: #0b1f14; font-size: 14px; font-weight: 700; margin: 0 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #27864f;">${title}</h3>
+        <table style="width:100%; border-collapse:collapse;">
+          ${rows.join('')}
+        </table>
+      </div>
+    ` : '';
+  };
 
   return `
 <!DOCTYPE html>
@@ -124,40 +147,96 @@ function getAdminNotificationEmail(formData) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
-    .container { max-width: 700px; margin: 0 auto; background: #ffffff; }
-    .header { background: linear-gradient(135deg, #0b1f14 0%, #14352a 100%); padding: 30px 20px; text-align: center; }
-    .header h1 { color: #ffffff; margin: 0; font-size: 22px; }
-    .content { padding: 30px 20px; }
-    .section-title { color: #0b1f14; font-size: 16px; font-weight: 700; margin: 20px 0 10px 0; border-bottom: 2px solid #27864f; padding-bottom: 8px; }
-    table { width: 100%; border-collapse: collapse; }
-    .footer { background: #f7faf8; padding: 15px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #e2e8e4; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+    .container { max-width: 700px; margin: 0 auto; background: #ffffff; border: 1px solid #e5e7eb; }
+    .header { background: linear-gradient(135deg, #0b1f14 0%, #14352a 100%); padding: 40px 20px; text-align: center; }
+    .logo { max-height: 80px; margin-bottom: 20px; }
+    .header h1 { color: #ffffff; margin: 0 0 8px 0; font-size: 26px; font-weight: 700; }
+    .header p { color: rgba(255,255,255,0.85); margin: 0; font-size: 14px; }
+    .badge { display: inline-block; background: #27864f; color: #ffffff; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-top: 10px; }
+    .content { padding: 40px; }
+    .quick-info { background: #f0f9f5; border-left: 4px solid #27864f; padding: 16px; margin-bottom: 24px; border-radius: 4px; }
+    .quick-info-row { display: flex; gap: 30px; margin-bottom: 10px; }
+    .quick-info-row:last-child { margin-bottom: 0; }
+    .quick-label { font-weight: 600; color: #0b1f14; font-size: 13px; min-width: 100px; }
+    .quick-value { color: #27864f; font-weight: 600; }
+    .footer { background: #f3f4f6; padding: 24px 20px; text-align: center; font-size: 12px; color: #6b7280; border-top: 1px solid #e5e7eb; }
+    .footer a { color: #27864f; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>New Form Submission</h1>
-      <p style="color: rgba(255,255,255,0.8); margin: 10px 0 0 0;">Axis Agro International Limited</p>
+      <img src="https://axisagro.co.uk/public/logo.png" alt="Axis Agro International Limited" class="logo" />
+      <h1>📨 New Form Submission</h1>
+      <p>Axis Agro International Limited</p>
+      <div class="badge">Action Required</div>
     </div>
     
     <div class="content">
-      <div class="section-title">📋 Form Details</div>
-      
-      <table>
-        ${formFields}
-      </table>
-      
-      <div class="section-title">⏰ Submission Time</div>
-      <p>${new Date().toLocaleString()}</p>
+      <!-- Quick Info Snapshot -->
+      <div class="quick-info">
+        <div class="quick-info-row">
+          <span class="quick-label">From:</span>
+          <span class="quick-value">${formData.firstName || ''} ${formData.lastName || ''}</span>
+        </div>
+        <div class="quick-info-row">
+          <span class="quick-label">Email:</span>
+          <span class="quick-value"><a href="mailto:${formData.email || ''}" style="color: #27864f; text-decoration: none;">${formData.email || '—'}</a></span>
+        </div>
+        <div class="quick-info-row">
+          <span class="quick-label">Type:</span>
+          <span class="quick-value">${formData.businessType ? formData.businessType.replace(/-/g, ' ').toUpperCase() : '—'}</span>
+        </div>
+      </div>
+
+      <!-- Contact Details -->
+      ${renderSection('📋 Contact Information', contactFields)}
+
+      <!-- Business Type -->
+      ${formData.businessType ? `
+        <div style="margin-bottom: 24px;">
+          <h3 style="color: #0b1f14; font-size: 14px; font-weight: 700; margin: 0 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #27864f;">🏢 Business Type</h3>
+          <table style="width:100%; border-collapse:collapse;">
+            <tr style="background:#f9fafb;">
+              <td style="padding: 12px 15px; border-bottom: 1px solid #e5e7eb; font-weight: 600; color: #0b1f14; width: 35%;">Business Type</td>
+              <td style="padding: 12px 15px; border-bottom: 1px solid #e5e7eb; color: #333;">${formData.businessType || '—'}</td>
+            </tr>
+          </table>
+        </div>
+      ` : ''}
+
+      <!-- Other Details -->
+      ${renderSection('📝 Additional Information', otherFields)}
+
+      <!-- Submission Timestamp -->
+      <div style="background: #faf9f7; padding: 16px; border-radius: 4px; text-align: center; color: #6b7280; font-size: 13px;">
+        <strong>Submitted on:</strong> ${new Date().toLocaleString('en-GB', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric', 
+          hour: '2-digit', 
+          minute: '2-digit',
+          timeZone: 'UTC'
+        })} UTC
+      </div>
     </div>
     
     <div class="footer">
-      <p>This is an automated notification. Please do not reply to this email.</p>
-      <p>© 2025 Axis Agro International Limited. All rights reserved.</p>
+      <p style="margin: 0 0 8px 0;"><strong>Quick Actions:</strong></p>
+      <p style="margin: 0 0 12px 0;">
+        <a href="mailto:${formData.email || ''}">Reply to ${formData.firstName || 'Enquirer'}</a> | 
+        <a href="https://axisagro.co.uk">View Website</a>
+      </p>
+      <p style="margin: 0;">Axis Agro International Limited | Registered in England & Wales and Uganda</p>
+      <p style="margin: 8px 0 0 0;">© 2025 Axis Agro International Limited. All rights reserved.</p>
     </div>
   </div>
 </body>
+</html>
+  `;
+}
 </html>
   `;
 }
