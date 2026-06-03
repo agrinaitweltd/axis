@@ -1235,6 +1235,9 @@ p  { color: var(--text-500); font-size: 0.95rem; }
   display:inline-block; width:64px; height:64px; line-height:64px; border-radius:50%; background:var(--green-100); color:var(--green-700); font-weight:900; font-size:28px; margin-bottom:0.6rem;
 }
 
+.form-success-banner { max-width:820px; margin: 1rem auto; }
+
+
 /* Mobile-friendly adjustments for contact area */
 @media (max-width: 900px) {
   .contact-grid { display:block; }

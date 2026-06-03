@@ -229,6 +229,8 @@ export default async function handler(req, res) {
 
     console.log('Sending admin notifications to:', adminEmails);
 
+    const adminResults = [];
+
     for (const adminEmail of adminEmails) {
       try {
         const adminEmailResult = await resend.emails.send({
@@ -240,11 +242,14 @@ export default async function handler(req, res) {
 
         if (adminEmailResult && adminEmailResult.error) {
           console.error(`Error sending admin email to ${adminEmail}:`, adminEmailResult.error);
+          adminResults.push({ to: adminEmail, success: false, error: adminEmailResult.error });
         } else {
           console.log(`Successfully sent admin email to ${adminEmail}`);
+          adminResults.push({ to: adminEmail, success: true });
         }
       } catch (err) {
         console.error(`Exception sending admin email to ${adminEmail}:`, err);
+        adminResults.push({ to: adminEmail, success: false, error: err.message || String(err) });
       }
     }
 
@@ -252,6 +257,7 @@ export default async function handler(req, res) {
       success: true,
       message: 'Form submitted successfully. Confirmation email sent.',
       recaptchaScore: recaptchaResult.score,
+      adminResults,
     });
   } catch (error) {
     console.error('Form submission error:', error);

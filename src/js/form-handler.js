@@ -88,11 +88,16 @@ class AxisAgroFormHandler {
         throw new Error(result.error || 'Form submission failed');
       }
 
-      // Show success message
-      this.showSuccess(form, result.message);
+      // If backend included admin send results, log any failures for debugging
+      if (result.adminResults && Array.isArray(result.adminResults)) {
+        const failed = result.adminResults.filter(r => !r.success);
+        if (failed.length) {
+          console.warn('Admin email failures:', failed);
+        }
+      }
 
-      // Reset form
-      form.reset();
+      // Show success UI and remove the form
+      this.showSuccess(form, result.message);
 
       // Clear any error messages
       this.clearError(form);
@@ -165,25 +170,28 @@ class AxisAgroFormHandler {
   }
 
   showSuccess(form, message) {
-    // Replace the form with a persistent success panel until the page is reloaded
-    const panel = document.createElement('div');
-    panel.className = 'contact-success-panel';
-    panel.setAttribute('role', 'status');
-    panel.innerHTML = `
-      <div class="success-card">
-        <div class="success-icon">✓</div>
-        <h3>Thanks — we've received your message</h3>
-        <p>${message || 'A confirmation email has been sent to you. Our team will reply within one business day.'}</p>
-        <p style="margin-top:8px; color:var(--text-500); font-size:0.95rem;">This form has been removed to prevent duplicate submissions. Refresh the page to send another message.</p>
+    // Remove the form completely and show a compact success banner where it was
+    const banner = document.createElement('div');
+    banner.className = 'form-success-banner';
+    banner.setAttribute('role', 'status');
+    banner.innerHTML = `
+      <div style="background:#eaf6ef;border:1px solid var(--green-200);padding:14px;border-radius:8px;display:flex;gap:12px;align-items:center;">
+        <div style="width:44px;height:44px;border-radius:50%;background:var(--green-100);color:var(--green-700);display:flex;align-items:center;justify-content:center;font-weight:800;">✓</div>
+        <div>
+          <div style="font-weight:700;">Thanks — we've received your message</div>
+          <div style="color:var(--text-500);font-size:0.95rem;margin-top:4px;">${message || 'A confirmation email has been sent. We will reply within one business day.'}</div>
+        </div>
       </div>
     `;
 
-    // If the form is inside a wrapper container, replace that wrapper; otherwise replace the form itself
+    // Find wrapper and remove it entirely, inserting banner in same position
     const wrapper = form.closest('.contact-form-wrapper') || form.parentElement;
-    if (wrapper) {
-      wrapper.parentNode.replaceChild(panel, wrapper);
-    } else {
-      form.parentNode.replaceChild(panel, form);
+    if (wrapper && wrapper.parentNode) {
+      wrapper.parentNode.insertBefore(banner, wrapper);
+      wrapper.remove();
+    } else if (form.parentNode) {
+      form.parentNode.insertBefore(banner, form);
+      form.remove();
     }
   }
 
