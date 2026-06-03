@@ -187,7 +187,7 @@ class AxisAgroFormHandler {
   }
 
   ensureBadgeVisibility() {
-    // Add CSS to ensure reCAPTCHA badge is always visible
+    // Add CSS to ensure reCAPTCHA badge is always visible and styled nicely
     const style = document.createElement('style');
     style.textContent = `
       .grecaptcha-badge {
@@ -199,6 +199,38 @@ class AxisAgroFormHandler {
         right: 20px !important;
         bottom: 20px !important;
         position: fixed !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+        border-radius: 4px !important;
+        transition: all 0.3s ease !important;
+      }
+      
+      .grecaptcha-badge:hover {
+        box-shadow: 0 6px 20px rgba(0,0,0,0.2) !important;
+        transform: translateY(-2px) !important;
+      }
+      
+      /* Make the badge container blend better with the site design */
+      .grecaptcha-badge::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(247,250,248,0.95)) !important;
+        border-radius: 4px !important;
+        z-index: -1 !important;
+      }
+      
+      /* Responsive positioning for mobile */
+      @media (max-width: 768px) {
+        .grecaptcha-badge {
+          right: 10px !important;
+          bottom: 10px !important;
+          transform: scale(0.9) !important;
+          transform-origin: bottom right !important;
+        }
+        
+        .grecaptcha-badge:hover {
+          transform: scale(1) translateY(-2px) !important;
+        }
       }
       
       /* Ensure badge is not covered by fixed footers */
@@ -209,6 +241,18 @@ class AxisAgroFormHandler {
       footer {
         position: relative;
         z-index: 10;
+      }
+      
+      /* Add a subtle privacy text link styling */
+      .grecaptcha-badge a {
+        color: #27864f !important;
+        text-decoration: none !important;
+        transition: color 0.2s ease !important;
+      }
+      
+      .grecaptcha-badge a:hover {
+        color: #1e6b42 !important;
+        text-decoration: underline !important;
       }
     `;
     document.head.appendChild(style);

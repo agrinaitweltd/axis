@@ -2611,6 +2611,40 @@ footer {
   .value-cards-grid { grid-template-columns: 1fr 1fr; }
   /* Product cards */
   .products-grid { grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  
+  /* Improved tablet experience */
+  .container {
+    padding: 0 1.5rem;
+  }
+  .nav-main-inner {
+    padding: 0 1.5rem;
+  }
+  .logo-wrapper {
+    height: 90px;
+    width: 280px;
+  }
+  .section {
+    padding: 70px 0;
+  }
+  .contact-form-wrapper {
+    padding: 2rem;
+  }
+  .btn {
+    padding: 0.85rem 1.6rem;
+  }
+  
+  /* Better tablet navigation */
+  .mobile-nav-header {
+    padding: 1.25rem 1.5rem;
+  }
+  .mobile-nav a,
+  .mobile-nav button {
+    padding: 1.1rem 1.75rem;
+    font-size: 1.05rem;
+  }
+  .mobile-nav-footer {
+    padding: 1.75rem;
+  }
 }
 
 @media (max-width: 600px) {
@@ -2627,6 +2661,14 @@ footer {
     font-size: 1rem;
   }
   .mobile-sub a { padding-left: 2.5rem; font-size: 0.9rem; }
+  
+  /* Improved mobile nav experience */
+  .mobile-nav-header {
+    padding: 1rem 1.25rem;
+  }
+  .mobile-nav-footer {
+    padding: 1.25rem;
+  }
 
   /* ---- Hero ---- */
   .hero { min-height: 100svh; }
@@ -2638,6 +2680,15 @@ footer {
   .hero p { font-size: 0.95rem; margin-bottom: 2rem; }
   .hero .btn-group { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
   .hero .btn-group .btn { width: auto; min-width: 180px; text-align: center; }
+  
+  /* Better hero scroll indicator on mobile */
+  .hero-scroll-indicator {
+    bottom: 1.5rem;
+  }
+  .hero-scroll-indicator span {
+    width: 20px;
+    height: 36px;
+  }
 
   /* ---- Section headings ---- */
   .section-heading { font-size: clamp(1.5rem, 7vw, 2rem); }
@@ -2667,13 +2718,39 @@ footer {
   /* ---- Product cards ---- */
   .products-grid { grid-template-columns: 1fr; gap: 1rem; }
   .product-card-img { height: 200px; }
+  .product-card {
+    border-radius: 12px;
+  }
+  .product-card-body {
+    padding: 1.25rem;
+  }
 
   /* ---- About preview ---- */
   .about-preview-grid { gap: 2rem; }
   .about-stats { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .stat-item {
+    padding: 1rem;
+  }
+  .stat-num {
+    font-size: 1.8rem;
+  }
+  .stat-label {
+    font-size: 0.7rem;
+  }
 
   /* ---- Value cards ---- */
   .value-cards-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .value-card {
+    padding: 1.25rem;
+  }
+  .value-icon {
+    width: 40px;
+    height: 40px;
+  }
+  .value-icon svg {
+    width: 20px;
+    height: 20px;
+  }
 
   /* ---- Partners ---- */
   .partners-grid { gap: 1.25rem; justify-content: center; }
@@ -2683,25 +2760,120 @@ footer {
   /* ---- Process steps ---- */
   .process-steps { gap: 1rem; }
   .step-card { padding: 1.5rem; }
+  .process-card {
+    padding: 1.5rem 1.25rem;
+  }
+  .process-card-icon {
+    width: 64px;
+    height: 64px;
+  }
+  .process-card-icon svg {
+    width: 48px;
+    height: 48px;
+  }
+  .process-card-title {
+    font-size: 1.1rem;
+  }
+  .process-card-desc {
+    font-size: 0.85rem;
+    max-width: 100%;
+  }
 
   /* ---- CTA section ---- */
   .cta-section { padding: 56px 0; }
   .cta-inner { padding: 2.5rem 1.5rem; text-align: center; }
   .cta-inner .btn-group { flex-direction: column; align-items: center; gap: 0.75rem; }
   .cta-inner .btn-group .btn { width: 100%; max-width: 280px; }
+  
+  /* Better CTA banner on mobile */
+  .cta-banner {
+    padding: 3rem 0;
+  }
+  .cta-banner .container {
+    padding: 0 1.25rem;
+  }
 
   /* ---- Footer ---- */
   .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
   .footer-cta-strip { flex-direction: column; text-align: center; gap: 1.25rem; padding: 2rem 1.5rem; }
   .footer-bottom { flex-direction: column; text-align: center; gap: 0.75rem; }
   .footer-socials { justify-content: center; }
+  .footer-col {
+    margin-bottom: 1.5rem;
+  }
+  .footer-col ul li {
+    padding: 0.5rem 0;
+  }
 
   /* ---- Forms ---- */
   .form-row { grid-template-columns: 1fr; }
+  .contact-form-wrapper {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+  .form-group label {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.85rem 1rem;
+    font-size: 1rem;
+    border-radius: 8px;
+  }
+  .biz-type-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .biz-card {
+    padding: 0.75rem;
+  }
+  
+  /* Better button sizing on mobile */
+  .btn {
+    padding: 0.9rem 1.5rem;
+    font-size: 0.9rem;
+    min-height: 44px; /* Better touch target */
+  }
+  .btn-primary {
+    font-size: 0.95rem;
+  }
 
   /* ---- Product page gallery ---- */
   .product-img-gallery { grid-template-columns: 1fr; }
   .product-img-gallery .main-img { grid-column: auto; }
+  
+  /* ---- Trade service cards ---- */
+  .trade-services-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .trade-service-card {
+    padding: 1.25rem;
+  }
+  
+  /* ---- Timeline ---- */
+  .timeline-item {
+    padding: 1.25rem;
+  }
+  
+  /* ---- Page banner ---- */
+  .page-banner {
+    padding: 3rem 0;
+  }
+  .page-banner-content {
+    padding: 0 1.25rem;
+  }
+  .page-banner h1 {
+    font-size: clamp(1.8rem, 8vw, 2.4rem);
+  }
+  
+  /* ---- Breadcrumb ---- */
+  .breadcrumb {
+    font-size: 0.8rem;
+    margin-bottom: 0.75rem;
+  }
 }
 
 @media (max-width: 400px) {
