@@ -128,35 +128,63 @@ class AxisAgroFormHandler {
     const submitBtn = form.querySelector('button[type="submit"]');
     if (!submitBtn) return;
 
+    // store original text
+    if (!submitBtn.getAttribute('data-original-text')) {
+      submitBtn.setAttribute('data-original-text', submitBtn.textContent.trim() || 'Send Enquiry');
+    }
+
+    // create or find overlay
+    let overlay = form.querySelector('.form-loading-overlay');
     if (isLoading) {
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending...';
       submitBtn.style.opacity = '0.6';
+
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'form-loading-overlay';
+        overlay.innerHTML = `
+          <div class="form-loading-inner">
+            <div class="spinner" aria-hidden="true"></div>
+            <div class="loading-text">Sending your message…</div>
+          </div>
+        `;
+        form.style.position = 'relative';
+        form.appendChild(overlay);
+      }
+
+      // disable all form controls while sending
+      Array.from(form.querySelectorAll('input, select, textarea, button')).forEach((el) => el.disabled = true);
     } else {
       submitBtn.disabled = false;
       submitBtn.textContent = submitBtn.getAttribute('data-original-text') || 'Send Enquiry';
       submitBtn.style.opacity = '1';
+
+      if (overlay) overlay.remove();
+      Array.from(form.querySelectorAll('input, select, textarea, button')).forEach((el) => el.disabled = false);
     }
   }
 
   showSuccess(form, message) {
-    this.clearMessages(form);
-
-    const successDiv = document.createElement('div');
-    successDiv.className = 'form-success-message';
-    successDiv.setAttribute('role', 'alert');
-    successDiv.innerHTML = `
-      <div style="background: #d5f0dc; border: 1px solid #27864f; border-radius: 6px; padding: 12px 16px; color: #0b1f14; margin-bottom: 20px;">
-        <strong>✓ Success!</strong> ${message}
+    // Replace the form with a persistent success panel until the page is reloaded
+    const panel = document.createElement('div');
+    panel.className = 'contact-success-panel';
+    panel.setAttribute('role', 'status');
+    panel.innerHTML = `
+      <div class="success-card">
+        <div class="success-icon">✓</div>
+        <h3>Thanks — we've received your message</h3>
+        <p>${message || 'A confirmation email has been sent to you. Our team will reply within one business day.'}</p>
+        <p style="margin-top:8px; color:var(--text-500); font-size:0.95rem;">This form has been removed to prevent duplicate submissions. Refresh the page to send another message.</p>
       </div>
     `;
 
-    form.insertBefore(successDiv, form.firstChild);
-
-    // Auto-remove after 6 seconds
-    setTimeout(() => {
-      successDiv.remove();
-    }, 6000);
+    // If the form is inside a wrapper container, replace that wrapper; otherwise replace the form itself
+    const wrapper = form.closest('.contact-form-wrapper') || form.parentElement;
+    if (wrapper) {
+      wrapper.parentNode.replaceChild(panel, wrapper);
+    } else {
+      form.parentNode.replaceChild(panel, form);
+    }
   }
 
   showError(form, message) {

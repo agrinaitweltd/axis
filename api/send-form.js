@@ -220,26 +220,31 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Failed to send confirmation email' });
     }
 
-    // Send admin notification emails
-    const adminEmails = [
-      process.env.ADMIN_EMAIL_1 || process.env.VITE_ADMIN_EMAIL_1,
-      process.env.ADMIN_EMAIL_2 || process.env.VITE_ADMIN_EMAIL_2,
-    ].filter(Boolean);
+    // Send admin notification emails (use sensible fallbacks so admins still get notified)
+    const envAdmin1 = process.env.ADMIN_EMAIL_1 || process.env.VITE_ADMIN_EMAIL_1;
+    const envAdmin2 = process.env.ADMIN_EMAIL_2 || process.env.VITE_ADMIN_EMAIL_2;
+    const fallbackAdmin = process.env.ADMIN_EMAIL || process.env.VITE_ADMIN_EMAIL || 'info@axisagro.co.uk';
+
+    const adminEmails = [envAdmin1, envAdmin2, fallbackAdmin].filter(Boolean);
 
     console.log('Sending admin notifications to:', adminEmails);
 
     for (const adminEmail of adminEmails) {
-      const adminEmailResult = await resend.emails.send({
-        from: process.env.SENDER_EMAIL || process.env.VITE_SENDER_EMAIL,
-        to: adminEmail,
-        subject: `New Form Submission from ${firstName} ${lastName}`,
-        html: getAdminNotificationEmail(formData),
-      });
+      try {
+        const adminEmailResult = await resend.emails.send({
+          from: process.env.SENDER_EMAIL || process.env.VITE_SENDER_EMAIL || fallbackAdmin,
+          to: adminEmail,
+          subject: `New Form Submission from ${firstName} ${lastName}`,
+          html: getAdminNotificationEmail(formData),
+        });
 
-      if (adminEmailResult.error) {
-        console.error(`Error sending admin email to ${adminEmail}:`, adminEmailResult.error);
-      } else {
-        console.log(`Successfully sent admin email to ${adminEmail}`);
+        if (adminEmailResult && adminEmailResult.error) {
+          console.error(`Error sending admin email to ${adminEmail}:`, adminEmailResult.error);
+        } else {
+          console.log(`Successfully sent admin email to ${adminEmail}`);
+        }
+      } catch (err) {
+        console.error(`Exception sending admin email to ${adminEmail}:`, err);
       }
     }
 
