@@ -258,22 +258,16 @@ export default async function handler(req, res) {
     }
 
     // Check environment variables
-    if (!process.env.RESEND_API_KEY && !process.env.VITE_RESEND_API_KEY) {
+    const apiKey = process.env.RESEND_API_KEY || process.env.VITE_RESEND_API_KEY;
+    if (!apiKey) {
       console.error('RESEND_API_KEY is not set');
-      return res.status(500).json({ error: 'Server configuration error' });
+      return res.status(500).json({ error: 'Email service not configured (missing API key)' });
     }
 
-    if (!process.env.SENDER_EMAIL && !process.env.VITE_SENDER_EMAIL) {
-      console.error('SENDER_EMAIL is not set');
-      return res.status(500).json({ error: 'Server configuration error' });
-    }
-
-    // Verify reCAPTCHA
-    const recaptchaResult = await verifyRecaptcha(recaptchaToken);
-    if (!recaptchaResult.valid) {
-      console.warn('reCAPTCHA verification failed:', recaptchaResult);
-      return res.status(403).json({ error: 'reCAPTCHA verification failed. Please try again.' });
-    }
+    const senderEmail = process.env.SENDER_EMAIL || process.env.VITE_SENDER_EMAIL || 'noreply@axisagro.co.uk';
+    
+    console.log('Using sender email:', senderEmail);
+    console.log('API Key present:', !!apiKey);
 
     const { email, firstName, lastName } = formData;
 
@@ -283,21 +277,34 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid email address' });
     }
 
+    // Verify reCAPTCHA
+    const recaptchaResult = await verifyRecaptcha(recaptchaToken);
+    if (!recaptchaResult.valid) {
+      console.warn('reCAPTCHA verification failed:', recaptchaResult);
+      return res.status(403).json({ error: 'reCAPTCHA verification failed. Please try again.' });
+    }
+
     console.log('Sending confirmation email to:', email);
     // Send confirmation email to user
     const senderEmail = process.env.SENDER_EMAIL || process.env.VITE_SENDER_EMAIL || 'noreply@axisagro.co.uk';
-    const userEmailResult = await resend.emails.send({
-      from: senderEmail,
-      to: email,
-      subject: 'We Received Your Enquiry - Axis Agro International Limited',
-      html: getUserConfirmationEmail(formData),
-    });
+    
+    try {
+      const userEmailResult = await resend.emails.send({
+        from: senderEmail,
+        to: email,
+        subject: 'We Received Your Enquiry - Axis Agro International Limited',
+        html: getUserConfirmationEmail(formData),
+      });
 
-    console.log('User email result:', JSON.stringify(userEmailResult, null, 2));
+      console.log('User email result:', JSON.stringify(userEmailResult, null, 2));
 
-    if (userEmailResult.error) {
-      console.error('Error sending user confirmation email:', userEmailResult.error);
-      return res.status(500).json({ error: 'Failed to send confirmation email' });
+      if (userEmailResult.error) {
+        console.error('Error sending user confirmation email:', userEmailResult.error);
+        return res.status(500).json({ error: 'Failed to send confirmation email: ' + (userEmailResult.error?.message || userEmailResult.error) });
+      }
+    } catch (emailErr) {
+      console.error('Exception sending user email:', emailErr);
+      return res.status(500).json({ error: 'Email service error: ' + (emailErr.message || String(emailErr)) });
     }
 
     // Send admin notification emails to hardcoded addresses
@@ -339,6 +346,10 @@ export default async function handler(req, res) {
     });
   } catch (error) {
     console.error('Form submission error:', error);
-    return res.status(500).json({ error: 'Internal server error: ' + error.message });
+    console.error('Error stack:', error.stack);
+    return res.status(500).json({ 
+      error: 'Server error: ' + (error.message || String(error)),
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 }
