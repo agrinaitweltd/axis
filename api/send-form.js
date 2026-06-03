@@ -1,7 +1,8 @@
 import { Resend } from 'resend';
 import axios from 'axios';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend with API key
+const resend = new Resend(process.env.RESEND_API_KEY || process.env.VITE_RESEND_API_KEY);
 
 // Verify reCAPTCHA token
 async function verifyRecaptcha(token) {
@@ -11,7 +12,7 @@ async function verifyRecaptcha(token) {
       null,
       {
         params: {
-          secret: process.env.RECAPTCHA_SECRET_KEY,
+          secret: process.env.RECAPTCHA_SECRET_KEY || process.env.VITE_RECAPTCHA_SECRET_KEY,
           response: token,
         },
       }
@@ -178,12 +179,12 @@ export default async function handler(req, res) {
     }
 
     // Check environment variables
-    if (!process.env.RESEND_API_KEY) {
+    if (!process.env.RESEND_API_KEY && !process.env.VITE_RESEND_API_KEY) {
       console.error('RESEND_API_KEY is not set');
       return res.status(500).json({ error: 'Server configuration error' });
     }
 
-    if (!process.env.SENDER_EMAIL) {
+    if (!process.env.SENDER_EMAIL && !process.env.VITE_SENDER_EMAIL) {
       console.error('SENDER_EMAIL is not set');
       return res.status(500).json({ error: 'Server configuration error' });
     }
@@ -206,7 +207,7 @@ export default async function handler(req, res) {
     console.log('Sending confirmation email to:', email);
     // Send confirmation email to user
     const userEmailResult = await resend.emails.send({
-      from: process.env.SENDER_EMAIL,
+      from: process.env.SENDER_EMAIL || process.env.VITE_SENDER_EMAIL,
       to: email,
       subject: 'We Received Your Enquiry - Axis Agro International Limited',
       html: getUserConfirmationEmail(formData),
@@ -221,15 +222,15 @@ export default async function handler(req, res) {
 
     // Send admin notification emails
     const adminEmails = [
-      process.env.ADMIN_EMAIL_1,
-      process.env.ADMIN_EMAIL_2,
+      process.env.ADMIN_EMAIL_1 || process.env.VITE_ADMIN_EMAIL_1,
+      process.env.ADMIN_EMAIL_2 || process.env.VITE_ADMIN_EMAIL_2,
     ].filter(Boolean);
 
     console.log('Sending admin notifications to:', adminEmails);
 
     for (const adminEmail of adminEmails) {
       const adminEmailResult = await resend.emails.send({
-        from: process.env.SENDER_EMAIL,
+        from: process.env.SENDER_EMAIL || process.env.VITE_SENDER_EMAIL,
         to: adminEmail,
         subject: `New Form Submission from ${firstName} ${lastName}`,
         html: getAdminNotificationEmail(formData),

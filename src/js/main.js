@@ -160,24 +160,7 @@ import AxisAgroFormHandler from './form-handler.js';
     }, { passive: true });
   }
 
-  /* --- Contact form handler --- */
-  var contactForm = document.getElementById('contactForm');
-  if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var btn = contactForm.querySelector('.form-submit');
-      var originalText = btn.textContent;
-      btn.textContent = 'Message Sent!';
-      btn.style.background = 'var(--green-700)';
-      btn.disabled = true;
-      setTimeout(function () {
-        btn.textContent = originalText;
-        btn.style.background = '';
-        btn.disabled = false;
-        contactForm.reset();
-      }, 3000);
-    });
-  }
+  /* --- Contact form handler is now handled by form-handler.js with reCAPTCHA --- */
 
   /* --- Close mobile nav on link click --- */
   if (mobileNav) {

@@ -1,0 +1,11 @@
+# Environment variables - should be set in Vercel dashboard
+.env
+.env.local
+.env.example
+
+# Development files
+node_modules
+.git
+
+# Build artifacts that shouldn't be deployed separately
+dist
