@@ -1,8 +1,7 @@
 import { Resend } from 'resend';
 import axios from 'axios';
 
-// Initialize Resend with API key
-const resend = new Resend(process.env.RESEND_API_KEY || process.env.VITE_RESEND_API_KEY);
+// Don't initialize Resend here — we'll do it inside the handler so env vars are available
 
 // Verify reCAPTCHA token
 async function verifyRecaptcha(token) {
@@ -264,10 +263,10 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Email service not configured (missing API key)' });
     }
 
+    // Initialize Resend with API key
+    const resend = new Resend(apiKey);
+
     const senderEmail = process.env.SENDER_EMAIL || process.env.VITE_SENDER_EMAIL || 'noreply@axisagro.co.uk';
-    
-    console.log('Using sender email:', senderEmail);
-    console.log('API Key present:', !!apiKey);
 
     const { email, firstName, lastName } = formData;
 
