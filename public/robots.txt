@@ -1,0 +1,15 @@
+# robots.txt for axisagro.co.uk
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://axisagro.co.uk/sitemap.xml
+
+# Crawl-delay (optional, adjust as needed)
+# Crawl-delay: 1
+
+# Disallow specific paths if needed
+# Disallow: /private/
+# Disallow: /admin/
+# Disallow: /temp/
