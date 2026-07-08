@@ -12,6 +12,7 @@ export default defineConfig({
         'export-import': resolve(__dirname, 'export-import.html'),
         sourcing:       resolve(__dirname, 'sourcing.html'),
         coffee:         resolve(__dirname, 'products/coffee.html'),
+        avocados:       resolve(__dirname, 'products/avocados.html'),
         fruits:         resolve(__dirname, 'products/fruits.html'),
         grains:         resolve(__dirname, 'products/grains.html'),
         'other-produce': resolve(__dirname, 'products/other-produce.html'),

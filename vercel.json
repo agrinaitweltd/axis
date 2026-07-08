@@ -7,6 +7,7 @@
     { "source": "/sourcing",       "destination": "/sourcing.html" },
     { "source": "/export-import",  "destination": "/export-import.html" },
     { "source": "/products/coffee",        "destination": "/products/coffee.html" },
+    { "source": "/products/avocados",      "destination": "/products/avocados.html" },
     { "source": "/products/fruits",        "destination": "/products/fruits.html" },
     { "source": "/products/grains",        "destination": "/products/grains.html" },
     { "source": "/products/other-produce", "destination": "/products/other-produce.html" },
