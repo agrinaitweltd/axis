@@ -10,10 +10,11 @@ import AxisAgroFormHandler from './form-handler.js';
 
   /* --- Navbar scroll behaviour --- */
   const navbar = document.getElementById('navbar');
+  const siteHeader = document.getElementById('siteHeader');
 
   function handleScroll() {
-    if (!navbar) return;
-    navbar.classList.toggle('scrolled', window.scrollY > 10);
+    if (!siteHeader) return;
+    siteHeader.classList.toggle('scrolled', window.scrollY > 10);
   }
 
   window.addEventListener('scroll', handleScroll, { passive: true });
