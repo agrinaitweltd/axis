@@ -99,6 +99,26 @@ p  { color: var(--text-500); font-size: 0.95rem; }
 .section { padding: 90px 0; }
 .section-alt { background: var(--bg-light); }
 
+/* --- Fruit decor accents (products section) --- */
+.products-showcase { position: relative; overflow: hidden; }
+.fruit-decor {
+  position: absolute;
+  z-index: 0;
+  opacity: 0.12;
+  pointer-events: none;
+  animation: fruitFloat 12s ease-in-out infinite;
+}
+.fruit-decor svg { display: block; width: 100%; height: 100%; }
+.fruit-decor-1 { top: -40px; right: -40px; width: 200px; height: 200px; }
+.fruit-decor-2 { bottom: -50px; left: -50px; width: 220px; height: 220px; animation-name: fruitFloatAlt; animation-duration: 14s; }
+.products-showcase .container { position: relative; z-index: 1; }
+
+@media (max-width: 900px) {
+  .fruit-decor { opacity: 0.08; }
+  .fruit-decor-1 { width: 130px; height: 130px; }
+  .fruit-decor-2 { width: 150px; height: 150px; }
+}
+
 .section-dark {
   background: var(--green-800);
   color: var(--white);
@@ -812,6 +832,47 @@ p  { color: var(--text-500); font-size: 0.95rem; }
 }
 
 /* ============================================================
+   FLOATING FRUITS (hero decorative layer)
+   ============================================================ */
+.floating-fruits {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.fruit {
+  position: absolute;
+  opacity: 0.9;
+  filter: drop-shadow(0 10px 22px rgba(0,0,0,0.28));
+  animation: fruitFloat 9s ease-in-out infinite;
+  will-change: transform;
+}
+
+.fruit svg { display: block; }
+
+.fruit-avocado { top: 16%;  right: 9%;  width: 68px;  animation-duration: 8s;  animation-delay: 0s; }
+.fruit-orange  { top: 62%;  right: 16%; width: 46px;  animation-duration: 7s;  animation-delay: 1.2s; animation-name: fruitFloatAlt; }
+.fruit-coffee  { top: 34%;  right: 22%; width: 40px;  animation-duration: 10s; animation-delay: 2.4s; }
+.fruit-mango   { top: 76%;  right: 5%;  width: 54px;  animation-duration: 9s;  animation-delay: 0.6s; animation-name: fruitFloatAlt; }
+.fruit-leaf    { top: 8%;   right: 26%; width: 34px;  animation-duration: 6.5s; animation-delay: 1.8s; }
+
+@keyframes fruitFloat {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%      { transform: translateY(-20px) rotate(4deg); }
+}
+
+@keyframes fruitFloatAlt {
+  0%, 100% { transform: translateY(0) rotate(3deg); }
+  50%      { transform: translateY(-26px) rotate(-6deg); }
+}
+
+@media (max-width: 900px) {
+  .floating-fruits { display: none; }
+}
+
+/* ============================================================
    PROCESS STEPS  (Sourcing → Processing → Exporting)
    ============================================================ */
 .process-section {
@@ -1167,8 +1228,8 @@ p  { color: var(--text-500); font-size: 0.95rem; }
 }
 
 .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-8px) scale(1.015);
+  box-shadow: 0 20px 44px rgba(30,107,66,0.18);
 }
 
 .product-card-img {
@@ -2963,4 +3024,17 @@ footer {
   .about-stats { grid-template-columns: 1fr; }
   .hero h1 { font-size: clamp(1.8rem, 9vw, 2.4rem); }
   .logo-wrapper { height: 76px; width: 220px; }
+}
+
+/* ============================================================
+   MOTION PREFERENCE
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .floating-fruits { display: none; }
 }
