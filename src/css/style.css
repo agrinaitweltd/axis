@@ -17,6 +17,10 @@
   --green-200:    #a4ddb5;
   --green-100:    #d5f0dc;
   --green-50:     #eef8f0;
+  --citrus-600:   #d97e1a;
+  --citrus-500:   #f4a13c;
+  --citrus-400:   #f7b662;
+  --citrus-100:   #fdecd2;
   --text-900:     #111;
   --text-700:     #333;
   --text-500:     #555;
@@ -100,7 +104,7 @@ p  { color: var(--text-500); font-size: 0.95rem; }
 .section { padding: 90px 0; }
 .section-alt { background: var(--bg-light); }
 
-/* --- Fruit decor accents (products section) --- */
+/* --- Fruit decor accents (reused across sections) --- */
 .products-showcase { position: relative; overflow: hidden; }
 .fruit-decor {
   position: absolute;
@@ -115,7 +119,7 @@ p  { color: var(--text-500); font-size: 0.95rem; }
 .products-showcase .container { position: relative; z-index: 1; }
 
 @media (max-width: 900px) {
-  .fruit-decor { opacity: 0.08; }
+  .fruit-decor { opacity: 0.14; }
   .fruit-decor-1 { width: 130px; height: 130px; }
   .fruit-decor-2 { width: 150px; height: 150px; }
 }
@@ -1422,10 +1426,14 @@ p  { color: var(--text-500); font-size: 0.95rem; }
 /* ============================================================
    SOURCING
    ============================================================ */
-.sourcing-section { 
+.sourcing-section {
+  position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, var(--green-900) 0%, var(--green-800) 50%, rgba(20, 53, 42, 0.8) 100%);
 }
+
+.sourcing-section .fruit-decor { opacity: 0.14; }
+.sourcing-section .container { position: relative; z-index: 1; }
 
 .sourcing-wrapper {
   display: grid;
@@ -1618,6 +1626,42 @@ p  { color: var(--text-500); font-size: 0.95rem; }
   display: block;
 }
 
+/* Compact origin list — mobile replacement for the map visual */
+.sourcing-origins-mobile {
+  display: none;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-top: 1.75rem;
+}
+
+.sourcing-origin-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+}
+
+.sourcing-origin-row strong {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.3;
+}
+
+.sourcing-origin-row span {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.6);
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .sourcing-origins-mobile { display: flex; }
+}
+
 /* Team badge */
 .sourcing-team-badge {
   position: absolute;
@@ -1703,6 +1747,9 @@ p  { color: var(--text-500); font-size: 0.95rem; }
   padding: 70px 0;
   text-align: center;
 }
+
+.cta-banner .fruit-decor { opacity: 0.16; }
+.cta-banner .container { position: relative; z-index: 1; }
 
 .cta-banner h2 { color: var(--white); margin-bottom: 0.75rem; }
 .cta-banner p { color: rgba(255,255,255,0.7); margin-bottom: 2rem; font-size: 1rem; }

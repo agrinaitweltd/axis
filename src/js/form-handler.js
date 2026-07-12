@@ -7,18 +7,20 @@ class AxisAgroFormHandler {
   constructor() {
     this.siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
     this.recaptchaLoaded = false;
+    this.hasProtectedForm = !!document.querySelector('[data-recaptcha="true"]');
     this.init();
   }
 
   async init() {
-    // Load reCAPTCHA script
-    this.loadRecaptcha();
-    
-    // Setup form handlers
+    // Setup form handlers (safe no-op on pages with no protected form)
     this.setupFormHandlers();
-    
-    // Ensure badge is visible
-    this.ensureBadgeVisibility();
+
+    // Only load reCAPTCHA and its badge on pages that actually have a
+    // protected form — otherwise the badge has no business showing up.
+    if (this.hasProtectedForm) {
+      this.loadRecaptcha();
+      this.ensureBadgeVisibility();
+    }
   }
 
   loadRecaptcha() {
@@ -224,7 +226,8 @@ class AxisAgroFormHandler {
   }
 
   ensureBadgeVisibility() {
-    // Make reCAPTCHA badge visible in bottom right corner
+    // Keep the reCAPTCHA badge tucked flush into the corner rather than
+    // floating with a large gap off the edge of the viewport.
     const style = document.createElement('style');
     style.textContent = `
       .grecaptcha-badge {
@@ -232,10 +235,16 @@ class AxisAgroFormHandler {
         opacity: 1 !important;
         display: block !important;
         pointer-events: auto !important;
-        z-index: 99999 !important;
+        z-index: 999 !important;
         position: fixed !important;
-        bottom: 20px !important;
-        right: 20px !important;
+        bottom: 0 !important;
+        right: 0 !important;
+      }
+      @media (max-width: 600px) {
+        .grecaptcha-badge {
+          transform: scale(0.85);
+          transform-origin: bottom right;
+        }
       }
     `;
     document.head.appendChild(style);
