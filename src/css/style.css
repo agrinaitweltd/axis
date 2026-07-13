@@ -2325,6 +2325,69 @@ footer {
 .value-card p  { font-size: 0.85rem; color: rgba(255,255,255,0.55); margin: 0; line-height: 1.7; }
 
 /* ============================================================
+   MEET THE TEAM
+   ============================================================ */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.75rem;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.team-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 2rem;
+  text-align: center;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+}
+
+.team-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 44px rgba(30,107,66,0.14);
+}
+
+.team-avatar {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 1.25rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: 0.02em;
+}
+
+.team-card:nth-child(2) .team-avatar {
+  background: linear-gradient(135deg, var(--citrus-500), var(--citrus-600));
+}
+
+.team-card h3 { font-size: 1.1rem; margin-bottom: 0.3rem; }
+
+.team-role {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--green-500);
+  margin-bottom: 1rem;
+}
+
+.team-card p {
+  font-size: 0.88rem;
+  color: var(--text-500);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ============================================================
    CONTACT PAGE
    ============================================================ */
 .contact-grid {
