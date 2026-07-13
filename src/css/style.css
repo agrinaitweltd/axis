@@ -2329,46 +2329,90 @@ footer {
    ============================================================ */
 .team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.75rem;
-  max-width: 860px;
+  max-width: 880px;
   margin: 0 auto;
 }
 
 .team-card {
+  position: relative;
+  width: 100%;
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 2.5rem 2rem;
+  padding: 2.75rem 2rem 2.25rem;
   text-align: center;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+  cursor: pointer;
+  font-family: inherit;
+  overflow: hidden;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
 }
 
-.team-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 44px rgba(30,107,66,0.14);
+/* Accent bar that sweeps up on hover */
+.team-card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--green-500), var(--green-300));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.team-card:nth-child(2)::before {
+  background: linear-gradient(90deg, var(--citrus-500), var(--citrus-400));
+}
+
+.team-card:hover,
+.team-card:focus-visible {
+  transform: translateY(-6px);
+  box-shadow: 0 22px 48px rgba(30,107,66,0.16);
+  border-color: var(--green-200);
+  outline: none;
+}
+.team-card:hover::before,
+.team-card:focus-visible::before { transform: scaleX(1); }
 
 .team-avatar {
-  width: 84px;
-  height: 84px;
-  margin: 0 auto 1.25rem;
+  position: relative;
+  width: 116px;
+  height: 116px;
+  margin: 0 auto 1.4rem;
   border-radius: 50%;
+  overflow: hidden;
   background: linear-gradient(135deg, var(--green-500), var(--green-700));
   color: var(--white);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  font-size: 1.5rem;
-  letter-spacing: 0.02em;
+  box-shadow: 0 8px 22px rgba(11,31,20,0.14);
+  border: 3px solid var(--white);
+  outline: 1px solid var(--border);
 }
-
 .team-card:nth-child(2) .team-avatar {
   background: linear-gradient(135deg, var(--citrus-500), var(--citrus-600));
 }
 
-.team-card h3 { font-size: 1.1rem; margin-bottom: 0.3rem; }
+.team-avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.team-avatar-initials {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 2rem;
+  letter-spacing: 0.03em;
+  z-index: 0;
+}
+
+.team-card h3 { font-size: 1.15rem; margin-bottom: 0.35rem; }
 
 .team-role {
   display: inline-block;
@@ -2379,12 +2423,143 @@ footer {
   color: var(--green-500);
   margin-bottom: 1rem;
 }
+.team-card:nth-child(2) .team-role { color: var(--citrus-600); }
 
-.team-card p {
+.team-card > p {
   font-size: 0.88rem;
   color: var(--text-500);
   line-height: 1.7;
-  margin: 0;
+  margin: 0 0 1.25rem;
+}
+
+.team-readmore {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--green-600);
+  transition: gap 0.25s ease;
+}
+.team-card:nth-child(2) .team-readmore { color: var(--citrus-600); }
+.team-card:hover .team-readmore,
+.team-card:focus-visible .team-readmore { gap: 0.6rem; }
+.team-readmore svg { transition: transform 0.25s ease; }
+.team-card:hover .team-readmore svg { transform: translateX(2px); }
+
+/* ---- Bio modal ---- */
+.team-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+.team-modal[hidden] { display: none; }
+
+.team-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(11,31,20,0.55);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  animation: teamFade 0.3s ease forwards;
+}
+
+.team-modal-panel {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 560px;
+  max-height: calc(100vh - 3rem);
+  overflow-y: auto;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  box-shadow: 0 30px 80px rgba(11,31,20,0.35);
+  transform: translateY(24px) scale(0.97);
+  opacity: 0;
+  animation: teamModalIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes teamFade { to { opacity: 1; } }
+@keyframes teamModalIn {
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.team-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-500);
+  background: var(--bg-light);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.team-modal-close:hover {
+  background: var(--green-100);
+  color: var(--green-700);
+  transform: rotate(90deg);
+}
+
+.team-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+  padding-right: 2.5rem;
+}
+
+.team-modal-avatar {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.7rem;
+  box-shadow: 0 8px 22px rgba(11,31,20,0.14);
+  border: 3px solid var(--white);
+  outline: 1px solid var(--border);
+}
+.team-modal-avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.team-modal-header h3 { font-size: 1.4rem; margin-bottom: 0.35rem; }
+
+.team-modal-body p {
+  font-size: 0.95rem;
+  color: var(--text-500);
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+.team-modal-body p:last-child { margin-bottom: 0; }
+
+body.team-modal-open { overflow: hidden; }
+
+@media (max-width: 520px) {
+  .team-modal-panel { padding: 2rem 1.5rem; }
+  .team-modal-header { flex-direction: column; text-align: center; gap: 1rem; padding-right: 0; }
+  .team-modal-avatar { width: 88px; height: 88px; }
 }
 
 /* ============================================================

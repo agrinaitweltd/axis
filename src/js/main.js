@@ -537,4 +537,56 @@ import AxisAgroFormHandler from './form-handler.js';
     contactForm.setAttribute('data-recaptcha', 'true');
   }
 
+  /* --- Team bio modal --- */
+  var teamModal = document.getElementById('teamModal');
+  if (teamModal) {
+    var teamCards = document.querySelectorAll('.team-card');
+    var modalName = document.getElementById('teamModalName');
+    var modalRole = document.getElementById('teamModalRole');
+    var modalAvatar = document.getElementById('teamModalAvatar');
+    var modalBody = document.getElementById('teamModalBody');
+    var lastFocused = null;
+
+    function openTeamModal(card) {
+      lastFocused = card;
+
+      modalName.textContent = card.getAttribute('data-name') || '';
+      modalRole.textContent = card.getAttribute('data-role') || '';
+
+      // Clone the avatar (photo or initials fallback) from the card
+      var avatar = card.querySelector('.team-avatar');
+      modalAvatar.innerHTML = avatar ? avatar.innerHTML : '';
+      // Match the card's accent (photo vs. citrus/green initials) on the modal avatar
+      modalAvatar.style.background = getComputedStyle(avatar).backgroundImage;
+
+      // Clone the full bio content
+      var bio = card.querySelector('.team-bio-full');
+      modalBody.innerHTML = bio ? bio.innerHTML : '';
+
+      teamModal.hidden = false;
+      document.body.classList.add('team-modal-open');
+
+      var closeBtn = teamModal.querySelector('.team-modal-close');
+      if (closeBtn) closeBtn.focus();
+    }
+
+    function closeTeamModal() {
+      teamModal.hidden = true;
+      document.body.classList.remove('team-modal-open');
+      if (lastFocused) lastFocused.focus();
+    }
+
+    teamCards.forEach(function (card) {
+      card.addEventListener('click', function () { openTeamModal(card); });
+    });
+
+    teamModal.querySelectorAll('[data-team-close]').forEach(function (el) {
+      el.addEventListener('click', closeTeamModal);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !teamModal.hidden) closeTeamModal();
+    });
+  }
+
 })();

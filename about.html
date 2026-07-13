@@ -273,21 +273,68 @@
         <p class="section-sub" style="margin:0 auto;">The directors behind Axis Agro International Limited, connecting East African producers with global markets.</p>
       </div>
       <div class="team-grid">
-        <div class="team-card fade-up fade-up-delay-1">
-          <div class="team-avatar">MB</div>
+        <button type="button" class="team-card fade-up fade-up-delay-1"
+                data-name="Micah Bamutura"
+                data-role="Director — Sourcing &amp; Field Operations"
+                aria-haspopup="dialog" aria-label="Read bio for Micah Bamutura, Director">
+          <div class="team-avatar">
+            <img src="/public/micah.png" alt="Micah Bamutura"
+                 onerror="this.closest('.team-avatar').classList.add('team-avatar--fallback');this.remove();" />
+            <span class="team-avatar-initials">MB</span>
+          </div>
           <h3>Micah Bamutura</h3>
           <span class="team-role">Director</span>
-          <p>Leads sourcing and farmer relationships across East Africa, working directly with cooperatives in Uganda, Kenya, and Tanzania to ensure quality and traceability at every stage.</p>
-        </div>
-        <div class="team-card fade-up fade-up-delay-2">
-          <div class="team-avatar">OA</div>
+          <p>Leads sourcing and farmer relationships across East Africa, working directly with cooperatives in Uganda, Kenya, and Tanzania.</p>
+          <span class="team-readmore">Read full bio
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </span>
+          <div class="team-bio-full" hidden>
+            <p>Micah Bamutura leads Axis Agro International's sourcing and field operations across East Africa. Based on the ground, he works hand-in-hand with farmers, cooperatives, and exporters throughout Uganda, Kenya, and Tanzania to secure produce that meets the company's exacting quality standards.</p>
+            <p>His focus is on building direct, long-term relationships with growers — cutting out unnecessary intermediaries, ensuring fair prices reach the farm gate, and maintaining full traceability from harvest to shipment. Micah oversees quality control and grading at source, so every batch is inspected and certified before it leaves the region.</p>
+          </div>
+        </button>
+
+        <button type="button" class="team-card fade-up fade-up-delay-2"
+                data-name="Oliver Amanya Alinaitwe"
+                data-role="Director — UK Operations &amp; International Trade"
+                aria-haspopup="dialog" aria-label="Read bio for Oliver Amanya Alinaitwe, Director">
+          <div class="team-avatar">
+            <img src="/public/oliver.png" alt="Oliver Amanya Alinaitwe"
+                 onerror="this.closest('.team-avatar').classList.add('team-avatar--fallback');this.remove();" />
+            <span class="team-avatar-initials">OA</span>
+          </div>
           <h3>Oliver Amanya Alinaitwe</h3>
           <span class="team-role">Director</span>
-          <p>Oversees UK operations and international trade partnerships, managing logistics, compliance, and buyer relationships across the export process.</p>
-        </div>
+          <p>Oversees UK operations and international trade partnerships, managing logistics, compliance, and buyer relationships.</p>
+          <span class="team-readmore">Read full bio
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </span>
+          <div class="team-bio-full" hidden>
+            <p>Oliver Amanya Alinaitwe directs Axis Agro International's UK operations and international trade partnerships. He manages the export and import process end-to-end — coordinating logistics, cold-chain shipping, customs documentation, and regulatory compliance with UK Food Standards Agency and international import requirements.</p>
+            <p>Oliver leads the company's relationships with wholesale buyers across the United Kingdom and international markets, matching supply from East Africa to buyer specifications across coffee, fresh fruits, grains, and specialty produce. His priority is dependable delivery and building trade partnerships that last beyond any single transaction.</p>
+          </div>
+        </button>
       </div>
     </div>
   </section>
+
+  <!-- Team bio modal -->
+  <div class="team-modal" id="teamModal" role="dialog" aria-modal="true" aria-labelledby="teamModalName" hidden>
+    <div class="team-modal-backdrop" data-team-close></div>
+    <div class="team-modal-panel" role="document">
+      <button type="button" class="team-modal-close" data-team-close aria-label="Close bio">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="team-modal-header">
+        <div class="team-modal-avatar" id="teamModalAvatar"></div>
+        <div>
+          <h3 id="teamModalName"></h3>
+          <span class="team-role" id="teamModalRole"></span>
+        </div>
+      </div>
+      <div class="team-modal-body" id="teamModalBody"></div>
+    </div>
+  </div>
 
   <section class="cta-banner">
     <div class="container fade-up">
